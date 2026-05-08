@@ -166,46 +166,98 @@
 
   if (input && results) {
     let index = [];
+    let isIndexReady = false;
+    let searchTimer = 0;
     const indexUrl = results.dataset.index;
+
+    const renderStatus = (message) => {
+      results.innerHTML = `<div class="empty"><p>${escapeHtml(message)}</p></div>`;
+    };
 
     fetch(indexUrl)
       .then((response) => response.json())
       .then((data) => {
         index = data;
+        isIndexReady = true;
+        if (input.value.trim()) {
+          runSearch();
+        }
+      })
+      .catch(() => {
+        renderStatus("搜索索引加载失败，请刷新页面后再试。");
       });
 
     const render = (items) => {
       if (!input.value.trim()) {
-        results.innerHTML = "";
+        renderStatus("输入关键词搜索文章。");
         return;
       }
 
       if (!items.length) {
-        results.innerHTML = '<div class="empty"><p>没有找到相关文章。</p></div>';
+        renderStatus("没有找到相关文章。");
         return;
       }
 
       results.innerHTML = items
         .map((item) => {
           const summary = item.summary || item.content || "";
-          return `<a class="search-result" href="${item.permalink}"><h2>${escapeHtml(item.title)}</h2><p>${escapeHtml(summary)}</p></a>`;
+          const tags = (item.tags || []).map((tag) => `<span>${escapeHtml(tag)}</span>`).join("");
+          return `<a class="search-result" href="${item.permalink}"><span class="search-result-meta">${escapeHtml(item.date || "")}${tags ? `<span class="search-result-tags">${tags}</span>` : ""}</span><h2>${escapeHtml(item.title)}</h2><p>${escapeHtml(summary)}</p></a>`;
         })
         .join("");
     };
 
-    input.addEventListener("input", () => {
+    const scoreItem = (item, terms) => {
+      const title = String(item.title || "").toLowerCase();
+      const summary = String(item.summary || "").toLowerCase();
+      const content = String(item.content || "").toLowerCase();
+      const tags = (item.tags || []).join(" ").toLowerCase();
+
+      let score = 0;
+      for (const term of terms) {
+        let termScore = 0;
+
+        if (title.includes(term)) termScore += title === term ? 18 : 10;
+        if (tags.includes(term)) termScore += 8;
+        if (summary.includes(term)) termScore += 5;
+        if (content.includes(term)) termScore += 2;
+
+        if (!termScore) return 0;
+        score += termScore;
+      }
+
+      return score;
+    };
+
+    const runSearch = () => {
       const terms = input.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+
+      if (!terms.length) {
+        render([]);
+        return;
+      }
+
+      if (!isIndexReady) {
+        renderStatus("正在加载搜索索引...");
+        return;
+      }
+
       const matches = index
         .map((item) => {
-          const haystack = `${item.title} ${item.summary} ${item.content} ${(item.tags || []).join(" ")}`.toLowerCase();
-          const score = terms.reduce((total, term) => total + (haystack.includes(term) ? 1 : 0), 0);
-          return { item, score };
+          return { item, score: scoreItem(item, terms) };
         })
-        .filter((entry) => entry.score === terms.length)
+        .filter((entry) => entry.score > 0)
+        .sort((a, b) => b.score - a.score)
         .slice(0, 20)
         .map((entry) => entry.item);
 
       render(matches);
+    };
+
+    renderStatus("输入关键词搜索文章。");
+    input.addEventListener("input", () => {
+      window.clearTimeout(searchTimer);
+      searchTimer = window.setTimeout(runSearch, 120);
     });
   }
 

@@ -1847,7 +1847,8 @@ body.image-zoom-open {
   border: 1px solid var(--border-soft);
   border-radius: var(--radius);
   color: inherit;
-  display: block;
+  display: grid;
+  gap: 0.45rem;
   padding: 1.2rem 1.35rem;
 }
 
@@ -1861,7 +1862,7 @@ body.image-zoom-open {
   color: var(--fg);
   font-size: 1.1rem;
   line-height: 1.45;
-  margin: 0 0 0.45rem;
+  margin: 0;
 }
 
 .search-result p {
@@ -1869,6 +1870,30 @@ body.image-zoom-open {
   font-size: 0.92rem;
   line-height: 1.65;
   margin: 0;
+}
+
+.search-result-meta {
+  align-items: center;
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.78rem;
+  gap: 0.45rem;
+}
+
+.search-result-tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.search-result-tags span {
+  background: var(--accent-wash);
+  border: 1px solid var(--accent-wash-strong);
+  border-radius: 999px;
+  color: var(--accent);
+  line-height: 1.2;
+  padding: 0.16rem 0.45rem;
 }
 
 .pagination {
