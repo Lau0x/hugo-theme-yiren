@@ -4,12 +4,14 @@
 {{- $alt := .alt | default "" -}}
 {{- $title := .title | default "" -}}
 {{- $sizes := .sizes | default "(max-width: 760px) calc(100vw - 2rem), 720px" -}}
+{{- $useOriginalForZoom := .useOriginalForZoom | default (site.Params.images.useOriginalForZoom | default false) -}}
 {{- $rasterTypes := slice "jpeg" "jpg" "png" "webp" -}}
 {{- if and $resource (in $rasterTypes $resource.MediaType.SubType) -}}
   {{- $small := $resource.Fit "720x720 webp q82" -}}
   {{- $medium := $resource.Fit "1080x1080 webp q84" -}}
   {{- $large := $resource.Fit "1440x1440 webp q86" -}}
-  <img{{ with $class }} class="{{ . }}"{{ end }} src="{{ $medium.RelPermalink }}" srcset="{{ $small.RelPermalink }} 720w, {{ $medium.RelPermalink }} 1080w, {{ $large.RelPermalink }} 1440w" sizes="{{ $sizes }}" data-full="{{ $resource.RelPermalink }}" alt="{{ $alt }}" loading="lazy" decoding="async"{{ with $title }} title="{{ . }}"{{ end }}>
+  {{- $full := cond $useOriginalForZoom $resource.RelPermalink $large.RelPermalink -}}
+  <img{{ with $class }} class="{{ . }}"{{ end }} src="{{ $medium.RelPermalink }}" srcset="{{ $small.RelPermalink }} 720w, {{ $medium.RelPermalink }} 1080w, {{ $large.RelPermalink }} 1440w" sizes="{{ $sizes }}" data-full="{{ $full }}" alt="{{ $alt }}" loading="lazy" decoding="async"{{ with $title }} title="{{ . }}"{{ end }}>
 {{- else if $resource -}}
   <img{{ with $class }} class="{{ . }}"{{ end }} src="{{ $resource.RelPermalink }}" alt="{{ $alt }}" loading="lazy" decoding="async"{{ with $title }} title="{{ . }}"{{ end }}>
 {{- else -}}

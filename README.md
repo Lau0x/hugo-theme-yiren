@@ -38,7 +38,7 @@ Yu is a quiet Hugo theme for personal journals, family notes, photo stories, and
 - 说说页面，适合短记录和碎片想法
 - 友情链接页面，数据来自 `data/links.yaml`
 - 公开相册，基于 Hugo page bundle
-- 文章和相册图片自动生成 WebP 展示图，点击放大时保留原图
+- 文章和相册图片自动生成 WebP 展示图，默认不暴露带 EXIF 的原图
 - 代码块复制按钮
 - 本地 JSON 搜索
 - SEO、Open Graph、Twitter Card、JSON-LD
@@ -218,7 +218,7 @@ tags:
 
 如果没有设置封面，首页卡片和分享卡片会自动使用正文第一张 Markdown 图片。
 
-## 图片优化和原图
+## 图片优化和隐私
 
 Yu 会自动优化放在 page bundle 里的本地图片：
 
@@ -239,7 +239,14 @@ content/albums/spring-walk/
 ![窗边的光](photo.jpg)
 ```
 
-主题会在构建时生成多尺寸 WebP 展示图，浏览器会按屏幕大小选择合适版本；点击图片放大时，会优先打开原图。这样页面加载更快，同时原始 JPG、PNG 或 WebP 仍然保留，适合以后想保存原图或展示 HDR 原片的场景。
+主题会在构建时生成多尺寸 WebP 展示图，浏览器会按屏幕大小选择合适版本；点击图片放大时，默认也会打开处理后的大尺寸 WebP，而不是原始 JPG、PNG 或 WebP。这样可以减少把拍摄设备、时间、地点等 EXIF 信息暴露到公开网页上的风险。
+
+不建议在公开生活照里直接暴露原图。如果你确实希望点击放大时使用原始文件，可以在站点配置里显式开启：
+
+```toml
+[params.images]
+useOriginalForZoom = true
+```
 
 外链图片、`/static` 里的绝对路径图片和 SVG 会保持原样，不会被主题转换。
 
@@ -589,7 +596,7 @@ hugo server --source hugo-theme-yu/exampleSite --themesDir . --theme hugo-theme-
 - Moments section for short micro-posts
 - Friends link page powered by `data/links.yaml`
 - Public album section using Hugo page bundles
-- Automatic WebP display images for local post and album photos, with original files preserved for zoom view
+- Automatic WebP display images for local post and album photos, without exposing original EXIF metadata by default
 - Code block copy button
 - JSON-powered local search
 - SEO metadata, Open Graph cards, Twitter cards, and JSON-LD
@@ -705,7 +712,14 @@ Reference a local post image like this:
 ![Window light](photo.jpg)
 ```
 
-During the Hugo build, Yu creates responsive WebP display images. Browsers pick an appropriate size for the current screen, while click-to-zoom uses the original file whenever possible. This keeps pages lighter without discarding your original JPG, PNG, or WebP files.
+During the Hugo build, Yu creates responsive WebP display images. Browsers pick an appropriate size for the current screen. Click-to-zoom also uses a processed large WebP by default, instead of the original JPG, PNG, or WebP file. This reduces the risk of exposing EXIF metadata such as camera model, capture time, or location.
+
+Exposing original files publicly is not recommended for personal photos. If you explicitly want zoom view to use original files, enable:
+
+```toml
+[params.images]
+useOriginalForZoom = true
+```
 
 Remote images, absolute `/static` paths, and SVG files are left unchanged.
 
