@@ -8,11 +8,27 @@
   {{ if $albums }}
     <ul class="album-list">
       {{ range $albums }}
+        {{ $albumPage := . }}
         {{ $images := .Resources.ByType "image" }}
         {{ $cover := "" }}
-        {{ with .Params.cover }}{{ $cover = . | relURL }}{{ end }}
+        {{ with .Params.cover }}
+          {{ $coverParam := . }}
+          {{ $cover = $coverParam | relURL }}
+          {{ with $albumPage.Resources.GetMatch $coverParam }}
+            {{ if in (slice "jpeg" "jpg" "png" "webp") .MediaType.SubType }}
+              {{ $cover = (.Fill "520x360 webp q82").RelPermalink }}
+            {{ else }}
+              {{ $cover = .RelPermalink }}
+            {{ end }}
+          {{ end }}
+        {{ end }}
         {{ if and (not $cover) (gt (len $images) 0) }}
-          {{ $cover = (index $images 0).RelPermalink }}
+          {{ $coverImage := index $images 0 }}
+          {{ if in (slice "jpeg" "jpg" "png" "webp") $coverImage.MediaType.SubType }}
+            {{ $cover = ($coverImage.Fill "520x360 webp q82").RelPermalink }}
+          {{ else }}
+            {{ $cover = $coverImage.RelPermalink }}
+          {{ end }}
         {{ end }}
         <li class="album-item">
           <a class="album-card{{ if not $cover }} no-cover{{ end }}" href="{{ .RelPermalink }}">

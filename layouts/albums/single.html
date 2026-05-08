@@ -19,7 +19,14 @@
       {{ range $images }}
         {{ $title := replaceRE "\\.[^.]+$" "" .Name }}
         <figure class="gallery-item">
-          <img class="gallery-image" src="{{ .RelPermalink }}" alt="{{ $title }}" loading="lazy" decoding="async">
+          {{ if in (slice "jpeg" "jpg" "png" "webp") .MediaType.SubType }}
+            {{ $small := .Fit "720x720 webp q82" }}
+            {{ $medium := .Fit "1080x1080 webp q84" }}
+            {{ $large := .Fit "1440x1440 webp q86" }}
+            <img class="gallery-image" src="{{ $medium.RelPermalink }}" srcset="{{ $small.RelPermalink }} 720w, {{ $medium.RelPermalink }} 1080w, {{ $large.RelPermalink }} 1440w" sizes="(max-width: 640px) calc(100vw - 2.2rem), 50vw" data-full="{{ .RelPermalink }}" alt="{{ $title }}" loading="lazy" decoding="async">
+          {{ else }}
+            <img class="gallery-image" src="{{ .RelPermalink }}" alt="{{ $title }}" loading="lazy" decoding="async">
+          {{ end }}
         </figure>
       {{ end }}
     </div>

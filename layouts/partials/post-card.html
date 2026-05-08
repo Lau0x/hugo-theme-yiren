@@ -9,9 +9,21 @@
     {{ end }}
   {{ end }}
 {{ end }}
+{{ $coverURL := $cover }}
+{{ if $cover }}
+  {{ with .Resources.GetMatch $cover }}
+    {{ if in (slice "jpeg" "jpg" "png" "webp") .MediaType.SubType }}
+      {{ $coverURL = (.Fill "760x520 webp q82").RelPermalink }}
+    {{ else }}
+      {{ $coverURL = .RelPermalink }}
+    {{ end }}
+  {{ else }}
+    {{ $coverURL = $cover | relURL }}
+  {{ end }}
+{{ end }}
 <li class="post-item">
   <a class="post-link{{ with $cover }} has-cover{{ end }}" href="{{ .RelPermalink }}">
-    {{ with $cover }}<span class="post-cover-bg" aria-hidden="true" style="background-image:url('{{ . | relURL }}')"></span>{{ end }}
+    {{ with $coverURL }}<span class="post-cover-bg" aria-hidden="true" style="background-image:url('{{ . }}')"></span>{{ end }}
     <span class="post-body">
       {{ with .Date }}<time class="post-date" datetime="{{ .Format "2006-01-02" }}">{{ .Format "2006-01-02" }}</time>{{ end }}
       <span class="post-title">{{ .Title }}</span>

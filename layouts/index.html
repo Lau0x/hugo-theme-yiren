@@ -13,7 +13,11 @@
   {{ $albumImages := slice }}
   {{ with $album }}
     {{ range .Resources.ByType "image" }}
-      {{ $albumImages = $albumImages | append .RelPermalink }}
+      {{ if in (slice "jpeg" "jpg" "png" "webp") .MediaType.SubType }}
+        {{ $albumImages = $albumImages | append (.Fill "760x520 webp q82").RelPermalink }}
+      {{ else }}
+        {{ $albumImages = $albumImages | append .RelPermalink }}
+      {{ end }}
     {{ end }}
   {{ end }}
   {{ $featurePost := false }}
@@ -36,6 +40,18 @@
     {{ end }}
   {{ end }}
   {{ if and (not $featurePost) $latestPost }}{{ $featurePost = $latestPost }}{{ end }}
+  {{ $featureCoverURL := $featureCover }}
+  {{ if and $featurePost $featureCover }}
+    {{ with $featurePost.Resources.GetMatch $featureCover }}
+      {{ if in (slice "jpeg" "jpg" "png" "webp") .MediaType.SubType }}
+        {{ $featureCoverURL = (.Fill "1120x760 webp q84").RelPermalink }}
+      {{ else }}
+        {{ $featureCoverURL = .RelPermalink }}
+      {{ end }}
+    {{ else }}
+      {{ $featureCoverURL = $featureCover | relURL }}
+    {{ end }}
+  {{ end }}
 
   <section class="home-hero" aria-labelledby="home-title">
     <aside class="home-brand-panel" aria-label="站点简介">
@@ -62,9 +78,9 @@
       </div>
 
       <div class="home-collage" aria-label="精选内容">
-        {{ if $featureCover }}
+        {{ if $featureCoverURL }}
           {{ with $featurePost }}
-            <a class="home-photo home-photo-large" href="{{ .RelPermalink }}" style="background-image: url('{{ $featureCover | relURL }}')">
+            <a class="home-photo home-photo-large" href="{{ .RelPermalink }}" style="background-image: url('{{ $featureCoverURL }}')">
               <span>{{ .Title }}</span>
             </a>
           {{ end }}

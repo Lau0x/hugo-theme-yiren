@@ -19,6 +19,7 @@ Yu is a quiet Hugo theme for personal journals, family notes, photo stories, and
 - [功能特性](#功能特性)
 - [新手从零部署](#新手从零部署)
 - [常用内容](#常用内容)
+- [图片优化和原图](#图片优化和原图)
 - [首页首屏配置](#首页首屏配置)
 - [评论系统](#评论系统)
 - [SEO 和分享](#seo-和分享)
@@ -37,7 +38,7 @@ Yu is a quiet Hugo theme for personal journals, family notes, photo stories, and
 - 说说页面，适合短记录和碎片想法
 - 友情链接页面，数据来自 `data/links.yaml`
 - 公开相册，基于 Hugo page bundle
-- 文章和相册图片点击放大
+- 文章和相册图片自动生成 WebP 展示图，点击放大时保留原图
 - 代码块复制按钮
 - 本地 JSON 搜索
 - SEO、Open Graph、Twitter Card、JSON-LD
@@ -216,6 +217,31 @@ tags:
 ```
 
 如果没有设置封面，首页卡片和分享卡片会自动使用正文第一张 Markdown 图片。
+
+## 图片优化和原图
+
+Yu 会自动优化放在 page bundle 里的本地图片：
+
+```text
+content/posts/my-post/
+  index.md
+  photo.jpg
+
+content/albums/spring-walk/
+  index.md
+  01.jpg
+  02.jpg
+```
+
+在文章里这样引用：
+
+```markdown
+![窗边的光](photo.jpg)
+```
+
+主题会在构建时生成多尺寸 WebP 展示图，浏览器会按屏幕大小选择合适版本；点击图片放大时，会优先打开原图。这样页面加载更快，同时原始 JPG、PNG 或 WebP 仍然保留，适合以后想保存原图或展示 HDR 原片的场景。
+
+外链图片、`/static` 里的绝对路径图片和 SVG 会保持原样，不会被主题转换。
 
 ## 首页首屏配置
 
@@ -530,6 +556,7 @@ hugo server --source hugo-theme-yu/exampleSite --themesDir . --theme hugo-theme-
 - [Quick Start](#quick-start)
 - [Cloudflare Pages](#cloudflare-pages)
 - [Posts](#posts)
+- [Image Optimization And Originals](#image-optimization-and-originals)
 - [Home Hero](#home-hero)
 - [Moments](#moments)
 - [Friends Links](#friends-links)
@@ -550,7 +577,7 @@ hugo server --source hugo-theme-yu/exampleSite --themesDir . --theme hugo-theme-
 - Moments section for short micro-posts
 - Friends link page powered by `data/links.yaml`
 - Public album section using Hugo page bundles
-- Click-to-zoom article images
+- Automatic WebP display images for local post and album photos, with original files preserved for zoom view
 - Code block copy button
 - JSON-powered local search
 - SEO metadata, Open Graph cards, Twitter cards, and JSON-LD
@@ -644,6 +671,31 @@ tags:
 ```
 
 If no cover is set, the home card and sharing metadata will use the first Markdown image in the post body.
+
+## Image Optimization And Originals
+
+Yu automatically optimizes local images stored in Hugo page bundles:
+
+```text
+content/posts/my-post/
+  index.md
+  photo.jpg
+
+content/albums/spring-walk/
+  index.md
+  01.jpg
+  02.jpg
+```
+
+Reference a local post image like this:
+
+```markdown
+![Window light](photo.jpg)
+```
+
+During the Hugo build, Yu creates responsive WebP display images. Browsers pick an appropriate size for the current screen, while click-to-zoom uses the original file whenever possible. This keeps pages lighter without discarding your original JPG, PNG, or WebP files.
+
+Remote images, absolute `/static` paths, and SVG files are left unchanged.
 
 ## Home Hero
 

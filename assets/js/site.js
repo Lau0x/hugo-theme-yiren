@@ -135,7 +135,7 @@
 
         activeImage = image;
         overlay.classList.remove("is-open", "is-animating");
-        zoomedImage.src = image.currentSrc || image.src;
+        zoomedImage.src = image.dataset.full || image.currentSrc || image.src;
         zoomedImage.alt = image.alt || "";
         setImageRect(image.getBoundingClientRect());
         overlay.classList.add("is-visible");
