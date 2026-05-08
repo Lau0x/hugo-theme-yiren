@@ -187,7 +187,7 @@
         renderStatus("搜索索引加载失败，请刷新页面后再试。");
       });
 
-    const render = (items) => {
+    const render = (items, terms = []) => {
       if (!input.value.trim()) {
         renderStatus("输入关键词搜索文章。");
         return;
@@ -202,9 +202,10 @@
         .map((item) => {
           const summary = item.summary || item.content || "";
           const tags = (item.tags || []).map((tag) => `<span>${escapeHtml(tag)}</span>`).join("");
-          return `<a class="search-result" href="${item.permalink}"><span class="search-result-meta">${escapeHtml(item.date || "")}${tags ? `<span class="search-result-tags">${tags}</span>` : ""}</span><h2>${escapeHtml(item.title)}</h2><p>${escapeHtml(summary)}</p></a>`;
+          return `<a class="search-result" href="${item.permalink}"><span class="search-result-meta">${escapeHtml(item.date || "")}${tags ? `<span class="search-result-tags">${tags}</span>` : ""}</span><h2>${highlightText(item.title, terms)}</h2><p>${highlightText(summary, terms)}</p></a>`;
         })
         .join("");
+      results.insertAdjacentHTML("afterbegin", `<p class="search-summary">找到 ${items.length} 篇相关内容</p>`);
     };
 
     const scoreItem = (item, terms) => {
@@ -251,7 +252,7 @@
         .slice(0, 20)
         .map((entry) => entry.item);
 
-      render(matches);
+      render(matches, terms);
     };
 
     renderStatus("输入关键词搜索文章。");
@@ -259,6 +260,32 @@
       window.clearTimeout(searchTimer);
       searchTimer = window.setTimeout(runSearch, 120);
     });
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        const firstResult = results.querySelector(".search-result");
+        if (firstResult) {
+          event.preventDefault();
+          firstResult.click();
+        }
+      }
+    });
+  }
+
+  function highlightText(value, terms) {
+    const text = String(value || "");
+    const pattern = terms.map(escapeRegExp).filter(Boolean).join("|");
+
+    if (!pattern) {
+      return escapeHtml(text);
+    }
+
+    return escapeHtml(text.replace(new RegExp(`(${pattern})`, "gi"), "\u0000$1\u0001"))
+      .replace(/\u0000/g, "<mark>")
+      .replace(/\u0001/g, "</mark>");
+  }
+
+  function escapeRegExp(value) {
+    return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   }
 
   function escapeHtml(value) {
