@@ -1,0 +1,28 @@
+{{ define "main" }}
+  {{ $pages := .Pages }}
+  {{ if .IsHome }}
+    {{ $sections := site.Params.mainSections | default (slice "posts") }}
+    {{ $pages = where site.RegularPages "Section" "in" $sections }}
+  {{ end }}
+
+  {{ if not .IsHome }}
+    <header class="list-header">
+      <h1>{{ .Title }}</h1>
+      {{ with .Content }}<div class="prose list-intro">{{ . }}</div>{{ end }}
+    </header>
+  {{ end }}
+
+  {{ if $pages }}
+    {{ $paginator := .Paginate $pages }}
+    <ul class="post-list">
+      {{ range $paginator.Pages }}
+        {{ partial "post-card.html" . }}
+      {{ end }}
+    </ul>
+    {{ template "_internal/pagination.html" . }}
+  {{ else }}
+    <div class="empty">
+      <p>还没有文章。</p>
+    </div>
+  {{ end }}
+{{ end }}

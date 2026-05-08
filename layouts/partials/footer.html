@@ -1,0 +1,5 @@
+<footer class="site-footer">
+  <div class="container">
+    <p>{{ site.Params.footer | default (printf "© %d %s" now.Year (site.Params.author | default site.Title)) }}</p>
+  </div>
+</footer>

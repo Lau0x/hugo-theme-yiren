@@ -1,0 +1,19 @@
+baseURL = 'https://example.org/'
+locale = 'zh-CN'
+title = '咕咕的博客'
+theme = 'hugo-theme-yiren'
+summaryLength = 36
+
+[params]
+lang = 'zh-CN'
+description = '个人博客'
+author = '咕咕'
+footer = '© 2026 咕咕'
+mainSections = ['posts']
+
+[outputs]
+home = ['HTML', 'RSS', 'JSON']
+
+[taxonomies]
+tag = 'tags'
+category = 'categories'

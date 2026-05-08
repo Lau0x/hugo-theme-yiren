@@ -1,0 +1,26 @@
+{{ $cover := "" }}
+{{ with .Params.cover }}{{ $cover = . }}{{ end }}
+{{ with .Params.image }}{{ $cover = . }}{{ end }}
+{{ with .Params.images }}{{ with index . 0 }}{{ $cover = . }}{{ end }}{{ end }}
+{{ if not $cover }}
+  {{ with findRESubmatch `!\[[^\]]*\]\(([^)]+)\)` .RawContent 1 }}
+    {{ with index . 0 }}
+      {{ $cover = index . 1 }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+<li class="post-item">
+  <a class="post-link{{ with $cover }} has-cover{{ end }}" href="{{ .RelPermalink }}">
+    {{ with $cover }}<span class="post-cover-bg" aria-hidden="true" style="background-image:url('{{ . | relURL }}')"></span>{{ end }}
+    <span class="post-body">
+      {{ with .Date }}<time class="post-date" datetime="{{ .Format "2006-01-02" }}">{{ .Format "2006-01-02" }}</time>{{ end }}
+      <span class="post-title">{{ .Title }}</span>
+      {{ with .Summary }}<span class="post-excerpt">{{ . | plainify }}</span>{{ end }}
+      {{ with .Params.tags }}
+        <span class="post-tags">
+          {{ range first 4 . }}<span class="tag">{{ . }}</span>{{ end }}
+        </span>
+      {{ end }}
+    </span>
+  </a>
+</li>
