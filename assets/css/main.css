@@ -719,16 +719,28 @@ a:hover {
 }
 
 .home-section-head a {
+  align-items: center;
+  border-radius: 999px;
   color: var(--fg-soft);
+  display: inline-flex;
   font-size: 0.86rem;
+  padding: 0.25rem 0.55rem;
 }
 
 .home-section-head a:hover {
+  background: var(--leaf-wash);
   color: var(--leaf);
+  transform: translateX(2px);
 }
 
 .home-section-head a::after {
   content: " →";
+  display: inline-block;
+  transition: transform 0.15s;
+}
+
+.home-section-head a:hover::after {
+  transform: translateX(3px);
 }
 
 .home-post-grid {
@@ -758,7 +770,27 @@ a:hover {
 }
 
 .home-post-grid .post-link:hover {
+  background: linear-gradient(90deg, var(--leaf-wash), transparent 72%);
   box-shadow: none;
+  transform: translateY(-1px);
+}
+
+.home-post-grid .post-link::before {
+  background: var(--leaf);
+  content: "";
+  inset: 1.25rem auto 1.25rem 0;
+  opacity: 0;
+  position: absolute;
+  transition: opacity 0.15s;
+  width: 2px;
+}
+
+.home-post-grid .post-link:hover::before {
+  opacity: 1;
+}
+
+.home-post-grid .post-link:hover .post-excerpt {
+  color: var(--fg);
 }
 
 .home-post-grid .post-link.has-cover .post-body {
