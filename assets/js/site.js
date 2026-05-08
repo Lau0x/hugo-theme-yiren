@@ -22,6 +22,7 @@
       const mode = getEffectiveTheme();
       const nextMode = mode === "dark" ? "浅色" : "深色";
       themeToggle.dataset.mode = mode;
+      themeToggle.setAttribute("aria-pressed", mode === "dark" ? "true" : "false");
       themeToggle.setAttribute("aria-label", `切换到${nextMode}模式`);
       themeToggle.setAttribute("title", `切换到${nextMode}模式`);
     }
@@ -31,6 +32,12 @@
   themeMedia.addEventListener("change", () => applyTheme(getStoredTheme()));
   themeToggle?.addEventListener("click", () => {
     applyTheme(getEffectiveTheme() === "dark" ? "light" : "dark");
+  });
+
+  document.querySelector(".site-header nav .is-active")?.scrollIntoView({
+    behavior: "auto",
+    block: "nearest",
+    inline: "center",
   });
 
   const backToTop = document.querySelector(".back-to-top");

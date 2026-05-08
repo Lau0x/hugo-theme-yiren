@@ -225,9 +225,12 @@ a:hover {
 }
 
 .nav-link {
+  border-radius: 999px;
   color: var(--fg-soft);
   font-size: 0.95rem;
   font-weight: 500;
+  line-height: 1.2;
+  padding: 0.35rem 0.6rem;
 }
 
 .nav-link:hover,
@@ -235,6 +238,12 @@ a:hover {
 .search-btn:hover,
 .search-btn.is-active {
   color: var(--fg);
+}
+
+.nav-link:hover,
+.nav-link.is-active {
+  background: var(--leaf-wash);
+  color: var(--leaf);
 }
 
 .search-btn {
@@ -476,6 +485,7 @@ a:hover {
   line-height: 1.28;
   margin: 0;
   max-width: 13em;
+  text-wrap: balance;
 }
 
 .home-intro h1::after {
@@ -777,6 +787,7 @@ a:hover {
   letter-spacing: 0;
   line-height: 1.3;
   margin: 0;
+  text-wrap: balance;
 }
 
 .list-intro {
@@ -861,6 +872,7 @@ a:hover {
   letter-spacing: 0;
   line-height: 1.4;
   margin: 0;
+  text-wrap: balance;
 }
 
 .post-link:hover .post-title {
@@ -1156,6 +1168,7 @@ a:hover {
 .post-meta {
   align-items: center;
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
 }
 
@@ -2054,7 +2067,7 @@ body.image-zoom-open {
     align-items: center;
     display: grid;
     gap: 0.45rem;
-    grid-template-columns: minmax(0, 1fr) 34px 34px;
+    grid-template-columns: minmax(0, 1fr) 40px 40px;
     justify-content: stretch;
     width: 100%;
   }
@@ -2084,7 +2097,8 @@ body.image-zoom-open {
     flex: 0 0 auto;
     font-size: 0.82rem;
     line-height: 1.2;
-    padding: 0.36rem 0.62rem;
+    min-height: 40px;
+    padding: 0.53rem 0.74rem;
   }
 
   .nav-link:hover,
@@ -2099,6 +2113,8 @@ body.image-zoom-open {
     background: var(--bg-card);
     border: 1px solid var(--border-soft);
     color: var(--fg-soft);
+    height: 40px;
+    width: 40px;
   }
 
   .search-btn:hover,
