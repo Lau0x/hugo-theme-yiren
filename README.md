@@ -19,6 +19,7 @@ Yu is a quiet Hugo theme for personal journals, family notes, photo stories, and
 - [功能特性](#功能特性)
 - [新手从零部署](#新手从零部署)
 - [常用内容](#常用内容)
+- [首页首屏配置](#首页首屏配置)
 - [评论系统](#评论系统)
 - [SEO 和分享](#seo-和分享)
 - [内容结构示例](#内容结构示例)
@@ -101,6 +102,12 @@ author = 'Example Author'
 footer = '© 2026 Example Author'
 mainSections = ['posts']
 projectsURL = '/projects/'
+homeBrand = 'Yu'
+homeTagline = 'A quiet Hugo theme for personal journals'
+homeKicker = 'Welcome to Yu'
+homeTitle = '把日子过成诗，把记录留给未来'
+homeDescription = '这里适合记录生活、想法、照片和那些值得慢慢保存的瞬间。'
+homeNote = '记录平凡生活中的微小而确定的幸福。'
 
 [outputs]
 home = ['HTML', 'RSS', 'JSON']
@@ -209,6 +216,26 @@ tags:
 ```
 
 如果没有设置封面，首页卡片和分享卡片会自动使用正文第一张 Markdown 图片。
+
+## 首页首屏配置
+
+首页会自动聚合文章、说说和公开相册。你也可以在 `hugo.toml` 的 `[params]` 里调整首屏文案：
+
+```toml
+[params]
+homeBrand = 'Yu'
+homeTagline = 'A quiet Hugo theme for personal journals'
+homeKicker = 'Welcome to Yu'
+homeTitle = '把日子过成诗，把记录留给未来'
+homeDescription = '这里适合记录生活、想法、照片和那些值得慢慢保存的瞬间。'
+homeNote = '记录平凡生活中的微小而确定的幸福。'
+homePhotoNote = '照片会慢慢长成时间的索引。'
+homeDailyNote = '一些不必写成长文的片刻，也值得被保存。'
+homeQuoteLabel = '小确幸'
+homeQuote = '光落在窗上，日子慢慢发亮。'
+```
+
+首屏大图会优先从文章 `cover`、`image`、`images` 或正文第一张 Markdown 图片中自动获取。相册拼贴会读取公开相册里的图片；如果还没有相册图片，会显示简短纸条占位。
 
 ### 说说
 
@@ -503,6 +530,7 @@ hugo server --source hugo-theme-yu/exampleSite --themesDir . --theme hugo-theme-
 - [Quick Start](#quick-start)
 - [Cloudflare Pages](#cloudflare-pages)
 - [Posts](#posts)
+- [Home Hero](#home-hero)
 - [Moments](#moments)
 - [Friends Links](#friends-links)
 - [Albums](#albums)
@@ -562,6 +590,11 @@ author = 'Example Author'
 footer = '© 2026 Example Author'
 mainSections = ['posts']
 projectsURL = '/projects/'
+homeBrand = 'Yu'
+homeTagline = 'A quiet Hugo theme for personal journals'
+homeKicker = 'Welcome to Yu'
+homeTitle = '把日子过成诗，把记录留给未来'
+homeDescription = '这里适合记录生活、想法、照片和那些值得慢慢保存的瞬间。'
 
 [outputs]
 home = ['HTML', 'RSS', 'JSON']
@@ -611,6 +644,26 @@ tags:
 ```
 
 If no cover is set, the home card and sharing metadata will use the first Markdown image in the post body.
+
+## Home Hero
+
+The home page automatically gathers posts, moments, and public albums. You can customize the hero copy in `hugo.toml`:
+
+```toml
+[params]
+homeBrand = 'Yu'
+homeTagline = 'A quiet Hugo theme for personal journals'
+homeKicker = 'Welcome to Yu'
+homeTitle = '把日子过成诗，把记录留给未来'
+homeDescription = '这里适合记录生活、想法、照片和那些值得慢慢保存的瞬间。'
+homeNote = '记录平凡生活中的微小而确定的幸福。'
+homePhotoNote = '照片会慢慢长成时间的索引。'
+homeDailyNote = '一些不必写成长文的片刻，也值得被保存。'
+homeQuoteLabel = '小确幸'
+homeQuote = '光落在窗上，日子慢慢发亮。'
+```
+
+The large hero image is picked from post `cover`, `image`, `images`, or the first Markdown image in the post body. Album collage images come from public album page bundles. If there are no album images yet, Yu shows short paper-note placeholders.
 
 ## Moments
 
