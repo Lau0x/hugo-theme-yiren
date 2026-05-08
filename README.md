@@ -1,5 +1,7 @@
 # Yu
 
+![Yu theme banner](images/banner.png)
+
 Yu is a quiet Hugo theme for personal journals, family notes, photo stories, and long-form writing. It focuses on a narrow reading column, warm paper-like background, cover cards, Chinese typography, article table of contents, lightweight search, and Medium-style image zoom.
 
 ## Documentation
