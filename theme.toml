@@ -1,10 +1,10 @@
-name = "Yiren"
+name = "Yu"
 license = "MIT"
-description = "A quiet Chinese Hugo theme inspired by a minimal personal blog."
-homepage = "https://github.com/Lau0x/hugo-theme-yiren"
+description = "A quiet Hugo theme for personal journals, family notes, and photo stories."
+homepage = "https://github.com/Lau0x/hugo-theme-yu"
 tags = ["blog", "minimal", "chinese"]
 features = ["posts", "moments", "albums", "links", "tags", "toc", "search"]
 min_version = "0.120.0"
 
 [author]
-  name = "Yiren Theme contributors"
+  name = "Yu Theme contributors"

@@ -1,14 +1,75 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 {{ $title := cond .IsHome site.Title (printf "%s · %s" .Title site.Title) }}
+{{ $description := site.Params.description | default site.Title }}
+{{ with .Description }}
+  {{ $description = . }}
+{{ else }}
+  {{ with .Summary }}
+    {{ $description = . | plainify | htmlUnescape | truncate 160 }}
+  {{ end }}
+{{ end }}
+{{ $description = $description | plainify | htmlUnescape | replaceRE `\s+` " " | truncate 160 }}
+{{ $imageParam := "" }}
+{{ with .Params.images }}
+  {{ if reflect.IsSlice . }}
+    {{ with index . 0 }}{{ $imageParam = . }}{{ end }}
+  {{ else }}
+    {{ $imageParam = . }}
+  {{ end }}
+{{ end }}
+{{ with .Params.image }}{{ $imageParam = . }}{{ end }}
+{{ with .Params.cover }}{{ $imageParam = . }}{{ end }}
+{{ $image := "" }}
+{{ with $imageParam }}
+  {{ with $.Resources.GetMatch . }}
+    {{ $image = .Permalink }}
+  {{ else }}
+    {{ $image = . | absURL }}
+  {{ end }}
+{{ else }}
+  {{ with index (.Resources.ByType "image") 0 }}
+    {{ $image = .Permalink }}
+  {{ else }}
+    {{ with findRESubmatch `!\[[^\]]*\]\(([^)]+)\)` .RawContent 1 }}
+      {{ with index . 0 }}
+        {{ $image = index . 1 | absURL }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+{{ end }}
 <title>{{ $title }}</title>
-<meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ site.Params.description | default site.Title }}{{ end }}">
+<meta name="description" content="{{ $description }}">
+<meta name="author" content="{{ site.Params.author | default site.Title }}">
 <link rel="canonical" href="{{ .Permalink }}">
 <link rel="icon" href="{{ "favicon.svg" | relURL }}" type="image/svg+xml">
+<meta property="og:title" content="{{ $title }}">
+<meta property="og:description" content="{{ $description }}">
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:site_name" content="{{ site.Title }}">
+{{ with $image }}<meta property="og:image" content="{{ . }}">{{ end }}
+<meta name="twitter:card" content="{{ if $image }}summary_large_image{{ else }}summary{{ end }}">
+<meta name="twitter:title" content="{{ $title }}">
+<meta name="twitter:description" content="{{ $description }}">
+{{ with $image }}<meta name="twitter:image" content="{{ . }}">{{ end }}
+{{ if .IsPage }}
+  {{ with .Date }}<meta property="article:published_time" content="{{ .Format "2006-01-02T15:04:05Z07:00" }}">{{ end }}
+  {{ with .Lastmod }}<meta property="article:modified_time" content="{{ .Format "2006-01-02T15:04:05Z07:00" }}">{{ end }}
+  {{ with .Params.tags }}{{ range . }}<meta property="article:tag" content="{{ . }}">{{ end }}{{ end }}
+{{ end }}
+{{ $schema := dict "@context" "https://schema.org" "@type" (cond .IsPage "BlogPosting" "WebSite") "name" $title "headline" $title "description" $description "url" .Permalink }}
+{{ with site.Params.author }}{{ $schema = merge $schema (dict "author" (dict "@type" "Person" "name" .)) }}{{ end }}
+{{ if .IsPage }}
+  {{ with .Date }}{{ $schema = merge $schema (dict "datePublished" (.Format "2006-01-02T15:04:05Z07:00")) }}{{ end }}
+  {{ with .Lastmod }}{{ $schema = merge $schema (dict "dateModified" (.Format "2006-01-02T15:04:05Z07:00")) }}{{ end }}
+{{ end }}
+{{ with $image }}{{ $schema = merge $schema (dict "image" .) }}{{ end }}
+<script type="application/ld+json">{{ $schema | jsonify | safeJS }}</script>
 <script>
   (() => {
     try {
-      const theme = localStorage.getItem("yiren-theme");
+      const theme = localStorage.getItem("yu-theme");
       if (theme === "dark" || theme === "light") {
         document.documentElement.dataset.theme = theme;
       }

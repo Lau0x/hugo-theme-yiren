@@ -3,7 +3,7 @@
   const themeMedia = window.matchMedia("(prefers-color-scheme: dark)");
 
   const getStoredTheme = () => {
-    const theme = localStorage.getItem("yiren-theme");
+    const theme = localStorage.getItem("yu-theme");
     return theme === "dark" || theme === "light" ? theme : "";
   };
 
@@ -12,10 +12,10 @@
   const applyTheme = (theme) => {
     if (theme === "dark" || theme === "light") {
       document.documentElement.dataset.theme = theme;
-      localStorage.setItem("yiren-theme", theme);
+      localStorage.setItem("yu-theme", theme);
     } else {
       document.documentElement.removeAttribute("data-theme");
-      localStorage.removeItem("yiren-theme");
+      localStorage.removeItem("yu-theme");
     }
 
     if (themeToggle) {

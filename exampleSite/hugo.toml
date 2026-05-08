@@ -1,7 +1,7 @@
 baseURL = 'https://example.org/'
 locale = 'zh-CN'
 title = 'Example Blog'
-theme = 'hugo-theme-yiren'
+theme = 'hugo-theme-yu'
 summaryLength = 36
 
 [params]

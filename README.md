@@ -1,6 +1,6 @@
-# Yiren
+# Yu
 
-Yiren is a quiet Hugo theme for Chinese personal blogs and weekly digests. It focuses on a narrow reading column, warm paper-like background, cover cards, Chinese typography, article table of contents, lightweight search, and Medium-style image zoom.
+Yu is a quiet Hugo theme for personal journals, family notes, photo stories, and long-form writing. It focuses on a narrow reading column, warm paper-like background, cover cards, Chinese typography, article table of contents, lightweight search, and Medium-style image zoom.
 
 ## Features
 
@@ -16,6 +16,7 @@ Yiren is a quiet Hugo theme for Chinese personal blogs and weekly digests. It fo
 - Click-to-zoom article images
 - Code block copy button
 - JSON-powered local search
+- SEO metadata, Open Graph cards, Twitter cards, and JSON-LD
 - Tags and taxonomy pages
 
 ## Install
@@ -23,13 +24,13 @@ Yiren is a quiet Hugo theme for Chinese personal blogs and weekly digests. It fo
 Add the theme to your Hugo site:
 
 ```bash
-git submodule add https://github.com/Lau0x/hugo-theme-yiren.git themes/yiren
+git submodule add https://github.com/Lau0x/hugo-theme-yu.git themes/yu
 ```
 
 Set the theme in `hugo.toml`:
 
 ```toml
-theme = 'yiren'
+theme = 'yu'
 ```
 
 ## Basic Config
@@ -38,7 +39,7 @@ theme = 'yiren'
 baseURL = 'https://example.org/'
 locale = 'zh-CN'
 title = 'Example Blog'
-theme = 'yiren'
+theme = 'yu'
 summaryLength = 36
 
 [params]
@@ -52,6 +53,26 @@ projectsURL = '/projects/'
 [outputs]
 home = ['HTML', 'RSS', 'JSON']
 ```
+
+## Configuration
+
+Common `params`:
+
+```toml
+[params]
+lang = 'zh-CN'
+description = 'A short site description used for SEO fallback text.'
+author = 'Example Author'
+footer = '© 2026 Example Author'
+mainSections = ['posts']
+projectsURL = '/projects/'
+```
+
+- `description`: default meta description when a page has no description or summary.
+- `author`: used in the footer and structured metadata.
+- `footer`: custom footer text.
+- `mainSections`: sections shown on the home page.
+- `projectsURL`: optional nav link for a standalone static project page.
 
 Create `content/search.md` to enable the search page:
 
@@ -76,6 +97,32 @@ tags = ['周刊', '创客']
 ```
 
 If no cover is set, the home card will use the first Markdown image in the post body.
+
+`cover`, `image`, or the first value in `images` is also used for Open Graph and Twitter preview cards.
+
+## SEO And Sharing
+
+The theme generates:
+
+- `<title>` and meta description
+- canonical URL
+- Open Graph metadata
+- Twitter Card metadata
+- article published/modified time
+- article tags
+- JSON-LD structured data
+
+For best sharing previews, add a page description and cover image:
+
+```yaml
+---
+title: Hello World
+description: A short summary for search engines and social previews.
+cover: /uploads/cover.jpg
+tags:
+  - note
+---
+```
 
 ## Moments
 
@@ -172,10 +219,50 @@ url: /projects/maker-tools/
 
 For a completely standalone HTML page, put it under `static`, for example `static/projects/index.html`. It will be available at `/projects/`.
 
+## Content Structure
+
+A typical site can look like this:
+
+```text
+content/
+  posts/
+    hello-world.md
+  moments/
+    _index.md
+    2026-05-08-note.md
+  albums/
+    _index.md
+    spring-walk/
+      index.md
+      01.jpg
+      02.jpg
+  links/
+    _index.md
+  about.md
+  search.md
+data/
+  links.yaml
+static/
+  projects/
+    index.html
+```
+
+## Deploy On Cloudflare Pages
+
+Use these build settings:
+
+```text
+Build command: hugo
+Build output directory: public
+Root directory: /
+```
+
+Make sure `public/` is not committed. Let Cloudflare Pages build it from the source files.
+
 ## Preview Example Site
 
-From the parent directory that contains `hugo-theme-yiren`:
+From the parent directory that contains `hugo-theme-yu`:
 
 ```bash
-hugo server --source hugo-theme-yiren/exampleSite --themesDir . --theme hugo-theme-yiren -D
+hugo server --source hugo-theme-yu/exampleSite --themesDir . --theme hugo-theme-yu -D
 ```
