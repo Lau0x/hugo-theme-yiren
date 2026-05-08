@@ -1,0 +1,24 @@
+{{ define "main" }}
+  <header class="list-header">
+    <h1>{{ .Title | default "友情链接" }}</h1>
+    {{ with .Content }}<div class="prose list-intro">{{ . }}</div>{{ end }}
+  </header>
+
+  {{ with hugo.Data.links }}
+    <ul class="link-list">
+      {{ range . }}
+        <li class="link-item">
+          <a class="link-card" href="{{ .url }}" target="_blank" rel="noopener noreferrer">
+            <span class="link-name">{{ .name }}</span>
+            {{ with .description }}<span class="link-description">{{ . }}</span>{{ end }}
+            <span class="link-url">{{ replaceRE "^https?://(www\\.)?" "" .url }}</span>
+          </a>
+        </li>
+      {{ end }}
+    </ul>
+  {{ else }}
+    <div class="empty">
+      <p>还没有添加友情链接。</p>
+    </div>
+  {{ end }}
+{{ end }}

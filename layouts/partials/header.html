@@ -7,6 +7,12 @@
         {{ with site.GetPage "moments" }}
           <a class="nav-link{{ if or (eq $.RelPermalink .RelPermalink) (eq $.Section "moments") }} is-active{{ end }}" href="{{ .RelPermalink }}">说说</a>
         {{ end }}
+        {{ with site.GetPage "links" }}
+          <a class="nav-link{{ if eq $.RelPermalink .RelPermalink }} is-active{{ end }}" href="{{ .RelPermalink }}">友链</a>
+        {{ end }}
+        {{ with site.Params.projectsURL }}
+          <a class="nav-link" href="{{ . | relURL }}">项目</a>
+        {{ end }}
         {{ with site.GetPage "tags" }}
           <a class="nav-link{{ if eq $.RelPermalink .RelPermalink }} is-active{{ end }}" href="{{ .RelPermalink }}">标签</a>
         {{ end }}

@@ -10,6 +10,7 @@ description = '个人博客'
 author = '咕咕'
 footer = '© 2026 咕咕'
 mainSections = ['posts']
+projectsURL = '/projects/'
 
 [outputs]
 home = ['HTML', 'RSS', 'JSON']

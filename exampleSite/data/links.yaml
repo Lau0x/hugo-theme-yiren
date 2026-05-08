@@ -1,0 +1,6 @@
+- name: Hugo
+  url: https://gohugo.io/
+  description: 快速、灵活的静态网站生成器。
+- name: Yiren Theme
+  url: https://github.com/Lau0x/hugo-theme-yiren
+  description: 这个博客主题的开源仓库。

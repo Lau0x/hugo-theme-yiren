@@ -11,6 +11,7 @@ Yiren is a quiet Hugo theme for Chinese personal blogs and weekly digests. It fo
 - Article reading time and wide-screen table of contents
 - System dark mode with a manual toggle
 - Moments section for short micro-posts
+- Friends link page powered by `data/links.yaml`
 - Click-to-zoom article images
 - Code block copy button
 - JSON-powered local search
@@ -45,6 +46,7 @@ description = '个人博客'
 author = '咕咕'
 footer = '© 2026 咕咕'
 mainSections = ['posts']
+projectsURL = '/projects/'
 
 [outputs]
 home = ['HTML', 'RSS', 'JSON']
@@ -94,6 +96,46 @@ mood: 随手记
 
 今天随手记一笔。
 ```
+
+## Friends Links
+
+Create `content/links/_index.md`:
+
+```yaml
+---
+title: 友情链接
+---
+```
+
+Then add links in `data/links.yaml`:
+
+```yaml
+- name: Hugo
+  url: https://gohugo.io/
+  description: 快速、灵活的静态网站生成器。
+```
+
+## Custom URLs And Static Pages
+
+Use `slug` to customize the final path segment:
+
+```yaml
+---
+title: Hello World
+slug: hello-world
+---
+```
+
+Use `url` to customize the full path:
+
+```yaml
+---
+title: Project Hub
+url: /projects/maker-tools/
+---
+```
+
+For a completely standalone HTML page, put it under `static`, for example `static/projects/index.html`. It will be available at `/projects/`.
 
 ## Preview Example Site
 
