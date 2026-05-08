@@ -19,7 +19,7 @@ Yiren is a quiet Hugo theme for Chinese personal blogs and weekly digests. It fo
 Add the theme to your Hugo site:
 
 ```bash
-git submodule add https://github.com/royleo/hugo-theme-yiren.git themes/yiren
+git submodule add https://github.com/Lau0x/hugo-theme-yiren.git themes/yiren
 ```
 
 Set the theme in `hugo.toml`:

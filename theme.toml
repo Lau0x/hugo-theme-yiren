@@ -1,7 +1,7 @@
 name = "Yiren"
 license = "MIT"
 description = "A quiet Chinese Hugo theme inspired by a minimal personal blog."
-homepage = "https://github.com/royleo/hugo-theme-yiren"
+homepage = "https://github.com/Lau0x/hugo-theme-yiren"
 tags = ["blog", "minimal", "chinese"]
 features = ["posts", "tags", "toc", "search"]
 min_version = "0.120.0"
