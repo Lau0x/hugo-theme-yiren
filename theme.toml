@@ -3,7 +3,7 @@ license = "MIT"
 description = "A quiet Chinese Hugo theme inspired by a minimal personal blog."
 homepage = "https://github.com/Lau0x/hugo-theme-yiren"
 tags = ["blog", "minimal", "chinese"]
-features = ["posts", "moments", "links", "tags", "toc", "search"]
+features = ["posts", "moments", "albums", "links", "tags", "toc", "search"]
 min_version = "0.120.0"
 
 [author]

@@ -1,0 +1,32 @@
+{{ define "main" }}
+<article class="album-page">
+  <header class="post-header album-header">
+    <h1 class="post-title">{{ .Title }}</h1>
+    <div class="post-meta">
+      {{ with .Date }}<time datetime="{{ .Format "2006-01-02" }}">{{ .Format "2006-01-02" }}</time>{{ end }}
+      {{ with .Params.location }}<span class="meta-sep">·</span><span>{{ . }}</span>{{ end }}
+    </div>
+    {{ with .Description }}<p class="album-lede">{{ . }}</p>{{ end }}
+  </header>
+
+  {{ with .Content }}
+    <div class="prose album-intro">{{ . }}</div>
+  {{ end }}
+
+  {{ $images := .Resources.ByType "image" }}
+  {{ if $images }}
+    <div class="gallery-grid">
+      {{ range $images }}
+        {{ $title := replaceRE "\\.[^.]+$" "" .Name }}
+        <figure class="gallery-item">
+          <img class="gallery-image" src="{{ .RelPermalink }}" alt="{{ $title }}" loading="lazy" decoding="async">
+        </figure>
+      {{ end }}
+    </div>
+  {{ else }}
+    <div class="empty">
+      <p>这个相册里还没有照片。</p>
+    </div>
+  {{ end }}
+</article>
+{{ end }}

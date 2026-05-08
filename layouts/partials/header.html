@@ -7,6 +7,9 @@
         {{ with site.GetPage "moments" }}
           <a class="nav-link{{ if or (eq $.RelPermalink .RelPermalink) (eq $.Section "moments") }} is-active{{ end }}" href="{{ .RelPermalink }}">说说</a>
         {{ end }}
+        {{ with site.GetPage "albums" }}
+          <a class="nav-link{{ if or (eq $.RelPermalink .RelPermalink) (eq $.Section "albums") }} is-active{{ end }}" href="{{ .RelPermalink }}">相册</a>
+        {{ end }}
         {{ with site.GetPage "links" }}
           <a class="nav-link{{ if eq $.RelPermalink .RelPermalink }} is-active{{ end }}" href="{{ .RelPermalink }}">友链</a>
         {{ end }}

@@ -58,7 +58,7 @@
     });
   });
 
-  const zoomableImages = document.querySelectorAll(".prose img");
+  const zoomableImages = document.querySelectorAll(".prose img, .gallery-image");
 
   if (zoomableImages.length) {
     const overlay = document.createElement("button");

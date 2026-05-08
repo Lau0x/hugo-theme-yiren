@@ -12,6 +12,7 @@ Yiren is a quiet Hugo theme for Chinese personal blogs and weekly digests. It fo
 - System dark mode with a manual toggle
 - Moments section for short micro-posts
 - Friends link page powered by `data/links.yaml`
+- Public album section using Hugo page bundles
 - Click-to-zoom article images
 - Code block copy button
 - JSON-powered local search
@@ -114,6 +115,40 @@ Then add links in `data/links.yaml`:
   url: https://gohugo.io/
   description: 快速、灵活的静态网站生成器。
 ```
+
+## Albums
+
+Create `content/albums/_index.md` to enable the album page:
+
+```yaml
+---
+title: 相册
+---
+```
+
+Each album should be a page bundle:
+
+```text
+content/albums/spring-walk/
+  index.md
+  01.jpg
+  02.jpg
+```
+
+The album front matter:
+
+```yaml
+---
+title: 春日散步
+date: 2026-05-08T10:00:00+08:00
+draft: false
+description: 几张日常照片。
+location: 上海
+private: false
+---
+```
+
+Albums with `private: true` are hidden from the public album list. This only hides them from theme rendering; do not deploy sensitive photos publicly unless you protect them at the hosting layer.
 
 ## Custom URLs And Static Pages
 

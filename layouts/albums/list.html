@@ -1,0 +1,38 @@
+{{ define "main" }}
+  <header class="list-header">
+    <h1>{{ .Title | default "相册" }}</h1>
+    {{ with .Content }}<div class="prose list-intro">{{ . }}</div>{{ end }}
+  </header>
+
+  {{ $albums := where .Pages.ByDate.Reverse "Params.private" "ne" true }}
+  {{ if $albums }}
+    <ul class="album-list">
+      {{ range $albums }}
+        {{ $images := .Resources.ByType "image" }}
+        {{ $cover := "" }}
+        {{ with .Params.cover }}{{ $cover = . | relURL }}{{ end }}
+        {{ if and (not $cover) (gt (len $images) 0) }}
+          {{ $cover = (index $images 0).RelPermalink }}
+        {{ end }}
+        <li class="album-item">
+          <a class="album-card{{ if not $cover }} no-cover{{ end }}" href="{{ .RelPermalink }}">
+            {{ with $cover }}<span class="album-cover" style="background-image: url('{{ . }}');"></span>{{ end }}
+            <span class="album-info">
+              <span class="album-title">{{ .Title }}</span>
+              <span class="album-meta">
+                {{ with .Date }}<time datetime="{{ .Format "2006-01-02" }}">{{ .Format "2006.01.02" }}</time>{{ end }}
+                {{ if and .Date (gt (len $images) 0) }}<span>·</span>{{ end }}
+                {{ if gt (len $images) 0 }}<span>{{ len $images }} 张照片</span>{{ end }}
+              </span>
+              {{ with .Description }}<span class="album-description">{{ . }}</span>{{ end }}
+            </span>
+          </a>
+        </li>
+      {{ end }}
+    </ul>
+  {{ else }}
+    <div class="empty">
+      <p>还没有公开相册。</p>
+    </div>
+  {{ end }}
+{{ end }}
