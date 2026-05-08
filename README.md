@@ -10,6 +10,7 @@ Yiren is a quiet Hugo theme for Chinese personal blogs and weekly digests. It fo
 - Chinese-friendly typography with LXGW WenKai
 - Article reading time and wide-screen table of contents
 - System dark mode with a manual toggle
+- Moments section for short micro-posts
 - Click-to-zoom article images
 - Code block copy button
 - JSON-powered local search
@@ -72,6 +73,27 @@ tags = ['周刊', '创客']
 ```
 
 If no cover is set, the home card will use the first Markdown image in the post body.
+
+## Moments
+
+Create short notes under `content/moments`:
+
+```bash
+hugo new moments/2026-05-08-note.md
+```
+
+The note body is rendered directly on `/moments/`, so it works well for quick thoughts, photos, or small updates:
+
+```yaml
+---
+title: "2026-05-08 09:00"
+date: 2026-05-08T09:00:00+08:00
+draft: false
+mood: 随手记
+---
+
+今天随手记一笔。
+```
 
 ## Preview Example Site
 

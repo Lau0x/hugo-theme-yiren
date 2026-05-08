@@ -1,0 +1,32 @@
+{{ define "main" }}
+  <header class="list-header">
+    <h1>{{ .Title | default "说说" }}</h1>
+    {{ with .Content }}<div class="prose list-intro">{{ . }}</div>{{ end }}
+  </header>
+
+  {{ $pages := .Pages.ByDate.Reverse }}
+  {{ if $pages }}
+    {{ $paginator := .Paginate $pages }}
+    <ol class="moment-list">
+      {{ range $paginator.Pages }}
+        <li class="moment-item">
+          <article class="moment-card">
+            <div class="moment-meta">
+              {{ with .Date }}<time class="moment-date" datetime="{{ .Format "2006-01-02T15:04:05Z07:00" }}">{{ .Format "2006.01.02 15:04" }}</time>{{ end }}
+              {{ with .Params.mood }}<span class="moment-mood">{{ . }}</span>{{ end }}
+            </div>
+            <a class="moment-permalink" href="{{ .RelPermalink }}" aria-label="打开这条说说">#</a>
+            <div class="prose moment-content">
+              {{ .Content }}
+            </div>
+          </article>
+        </li>
+      {{ end }}
+    </ol>
+    {{ template "_internal/pagination.html" . }}
+  {{ else }}
+    <div class="empty">
+      <p>还没有说说。</p>
+    </div>
+  {{ end }}
+{{ end }}

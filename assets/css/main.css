@@ -399,6 +399,120 @@ a:hover {
   color: var(--accent);
 }
 
+.moment-list {
+  display: grid;
+  gap: 1rem;
+  list-style: none;
+  margin: 2rem 0 0;
+  padding: 0;
+}
+
+.moment-item {
+  margin: 0;
+  padding-left: 1.1rem;
+  position: relative;
+}
+
+.moment-item::before {
+  background: var(--accent);
+  border: 3px solid var(--bg);
+  border-radius: 999px;
+  box-shadow: 0 0 0 1px var(--accent-wash-strong);
+  content: "";
+  height: 0.55rem;
+  left: 0;
+  position: absolute;
+  top: 1.45rem;
+  width: 0.55rem;
+}
+
+.moment-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 1.15rem 1.25rem;
+  position: relative;
+}
+
+.moment-card:hover {
+  border-color: var(--border);
+  box-shadow: var(--shadow);
+}
+
+.moment-meta {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.65rem;
+  padding-right: 2rem;
+}
+
+.moment-date {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.moment-mood {
+  background: var(--accent-wash);
+  border-radius: 999px;
+  color: var(--accent);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  padding: 0.15rem 0.55rem;
+}
+
+.moment-permalink {
+  border-radius: 999px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1;
+  padding: 0.3rem 0.45rem;
+  position: absolute;
+  right: 0.85rem;
+  top: 0.95rem;
+}
+
+.moment-permalink:hover {
+  background: var(--accent-wash);
+  color: var(--accent);
+}
+
+.moment-content.prose {
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.moment-content.prose p {
+  margin: 0.7rem 0;
+  text-align: left;
+}
+
+.moment-content.prose p:first-child {
+  margin-top: 0;
+}
+
+.moment-content.prose p:last-child {
+  margin-bottom: 0;
+}
+
+.moment-content.prose img {
+  margin: 0.9rem 0;
+}
+
+.moment-single .post-header {
+  margin-bottom: 1.5rem;
+}
+
+.moment-single .moment-meta {
+  margin-bottom: 0;
+  padding-right: 0;
+}
+
 .post {
   padding: 2.5rem 0 3rem;
 }
@@ -1029,11 +1143,23 @@ body.image-zoom-open {
   }
 
   .site-header nav {
-    gap: 0.85rem;
+    gap: 0.7rem;
   }
 
   .nav-link {
-    font-size: 0.9rem;
+    font-size: 0.86rem;
+  }
+
+  .moment-item {
+    padding-left: 0;
+  }
+
+  .moment-item::before {
+    display: none;
+  }
+
+  .moment-card {
+    padding: 1rem;
   }
 
   .post-link {
