@@ -38,34 +38,68 @@
 {{ else if eq $provider "waline" }}
   {{ $config := $comments.waline | default dict }}
   {{ with $config.serverURL }}
-    <div id="waline"></div>
+    <div id="waline">
+      <div class="waline-state" data-waline-state>
+        <span class="waline-state-spinner" aria-hidden="true"></span>
+        <p>正在加载评论...</p>
+      </div>
+    </div>
     <link rel="stylesheet" href="{{ $config.css | default "https://unpkg.com/@waline/client@v3/dist/waline.css" }}">
     <script type="module">
-      import { init } from "{{ $config.js | default "https://unpkg.com/@waline/client@v3/dist/waline.js" }}";
-
       const walineEl = document.querySelector("#waline");
-      const showWalineFallback = () => {
-        if (!walineEl || walineEl.querySelector(".waline-timeout")) return;
 
-        const loading = walineEl.querySelector(".wl-loading");
-        if (!loading) return;
-
-        loading.setAttribute("hidden", "");
-        const message = document.createElement("p");
-        message.className = "waline-timeout";
-        message.textContent = "评论加载有点慢，可以刷新页面或稍后再试。";
-        loading.insertAdjacentElement("afterend", message);
+      const clearWalineState = () => {
+        walineEl?.querySelector("[data-waline-state]")?.remove();
       };
 
-      window.setTimeout(showWalineFallback, {{ $config.timeout | default 12000 }});
+      const showWalineState = (message, retry = false) => {
+        if (!walineEl) return;
 
-      init({
-        el: "#waline",
-        serverURL: "{{ . }}",
-        path: "{{ $.RelPermalink }}",
-        dark: "{{ $config.dark | default "html[data-theme='dark']" }}"{{ with $config.lang }},
-        lang: "{{ . }}"{{ end }}
+        walineEl.querySelector("[data-waline-state]")?.remove();
+        walineEl.querySelector(".wl-loading")?.setAttribute("hidden", "");
+
+        const state = document.createElement("div");
+        state.className = "waline-state waline-state-error";
+        state.dataset.walineState = "";
+        state.innerHTML = `<p>${message}</p>${retry ? '<button type="button">刷新页面</button>' : ""}`;
+        state.querySelector("button")?.addEventListener("click", () => window.location.reload());
+        walineEl.appendChild(state);
+      };
+
+      const hasWalineResult = () => Boolean(walineEl?.querySelector(".wl-empty, .wl-card"));
+
+      const observer = new MutationObserver(() => {
+        if (hasWalineResult()) {
+          clearWalineState();
+        }
       });
+
+      if (walineEl) {
+        observer.observe(walineEl, { childList: true, subtree: true });
+      }
+
+      window.setTimeout(() => {
+        if (!hasWalineResult()) {
+          showWalineState("评论加载有点慢，可以刷新页面或稍后再试。", true);
+        }
+      }, {{ $config.timeout | default 12000 }});
+
+      try {
+        const { init } = await import("{{ $config.js | default "https://unpkg.com/@waline/client@v3/dist/waline.js" }}");
+
+        init({
+          el: "#waline",
+          serverURL: "{{ . }}",
+          path: "{{ $.RelPermalink }}",
+          dark: "{{ $config.dark | default "html[data-theme='dark']" }}"{{ with $config.lang }},
+          lang: "{{ . }}"{{ end }}
+        });
+
+        clearWalineState();
+      } catch (error) {
+        console.error("Waline failed to load:", error);
+        showWalineState("评论服务暂时没有加载成功，可以刷新页面或稍后再试。", true);
+      }
     </script>
   {{ end }}
 {{ else if eq $provider "twikoo" }}
