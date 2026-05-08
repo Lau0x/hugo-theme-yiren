@@ -7,4 +7,4 @@ features = ["posts", "moments", "albums", "links", "tags", "toc", "search"]
 min_version = "0.120.0"
 
 [author]
-  name = "Roy Liu"
+  name = "Yiren Theme contributors"

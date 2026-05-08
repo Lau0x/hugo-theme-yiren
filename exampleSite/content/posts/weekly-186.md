@@ -8,7 +8,7 @@ tags = ['周刊', '创客']
 
 欢迎投稿或推荐相关内容。
 
-投稿邮箱：`MakerCommunity@outlook.com`
+投稿邮箱：`hello@example.org`
 
 ### Bee Write Back：AMOLED 写作机
 

@@ -37,15 +37,15 @@ theme = 'yiren'
 ```toml
 baseURL = 'https://example.org/'
 locale = 'zh-CN'
-title = '咕咕的博客'
+title = 'Example Blog'
 theme = 'yiren'
 summaryLength = 36
 
 [params]
 lang = 'zh-CN'
-description = '个人博客'
-author = '咕咕'
-footer = '© 2026 咕咕'
+description = 'A Hugo example site'
+author = 'Example Author'
+footer = '© 2026 Example Author'
 mainSections = ['posts']
 projectsURL = '/projects/'
 
@@ -143,7 +143,7 @@ title: 春日散步
 date: 2026-05-08T10:00:00+08:00
 draft: false
 description: 几张日常照片。
-location: 上海
+location: 示例城市
 private: false
 ---
 ```
