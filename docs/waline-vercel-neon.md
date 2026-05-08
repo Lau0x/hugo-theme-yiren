@@ -154,6 +154,8 @@ comments.example.com
 
 之后 Hugo 里只需要把 `serverURL` 改成这个域名。
 
+如果你的域名 DNS 托管在 Cloudflare，可以先使用 `DNS only`。确认可用后，再按自己的网络情况决定是否开启代理。
+
 #### 可以以后从 Waline 迁移到别的评论系统吗？
 
 可以。Yu 主题的评论入口是可插拔的，换评论系统主要改 `params.comments.provider` 和对应配置。评论数据迁移取决于目标系统是否支持导入，建议定期从数据库导出备份。
@@ -291,6 +293,8 @@ Check the Vercel Logs for your Waline project. Common causes include missing dat
 #### Do I Need A Custom Domain?
 
 No. The `vercel.app` URL is enough. A custom subdomain such as `comments.example.com` can make future migration easier, but it is optional.
+
+If your DNS is hosted on Cloudflare, start with `DNS only`. After the domain works, decide whether to enable proxying based on your own network tests.
 
 #### Can I Migrate Away From Waline Later?
 

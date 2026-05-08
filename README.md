@@ -483,7 +483,7 @@ serverURL = 'https://your-waline-server.example.com'
 lang = 'zh-CN'
 ```
 
-Waline 需要后端服务和数据库，但数据更可控。
+Waline 需要后端服务和数据库，但数据更可控。推荐给 Waline 服务绑定一个独立子域名，例如 `https://comments.example.com`，以后迁移评论服务时只需要调整域名指向。
 
 ### Twikoo
 
@@ -775,6 +775,8 @@ provider = 'waline'
 serverURL = 'https://your-waline-server.example.com'
 lang = 'zh-CN'
 ```
+
+Using a dedicated subdomain such as `https://comments.example.com` is recommended. It makes future comment-service migration easier because the blog can keep the same `serverURL`.
 
 ## Custom URLs And Static Pages
 
