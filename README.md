@@ -105,9 +105,9 @@ projectsURL = '/projects/'
 homeBrand = 'Yu'
 homeTagline = 'A quiet Hugo theme for personal journals'
 homeKicker = 'Welcome to Yu'
-homeTitle = '把日子过成诗，把记录留给未来'
+homeTitle = '日子很长，慢慢记。'
 homeDescription = '这里适合记录生活、想法、照片和那些值得慢慢保存的瞬间。'
-homeNote = '记录平凡生活中的微小而确定的幸福。'
+homeNote = '把今天写下来，留给明天慢慢看。'
 
 [outputs]
 home = ['HTML', 'RSS', 'JSON']
@@ -226,12 +226,12 @@ tags:
 homeBrand = 'Yu'
 homeTagline = 'A quiet Hugo theme for personal journals'
 homeKicker = 'Welcome to Yu'
-homeTitle = '把日子过成诗，把记录留给未来'
+homeTitle = '日子很长，慢慢记。'
 homeDescription = '这里适合记录生活、想法、照片和那些值得慢慢保存的瞬间。'
-homeNote = '记录平凡生活中的微小而确定的幸福。'
+homeNote = '把今天写下来，留给明天慢慢看。'
 homePhotoNote = '照片会慢慢长成时间的索引。'
 homeDailyNote = '一些不必写成长文的片刻，也值得被保存。'
-homeQuoteLabel = '小确幸'
+homeQuoteLabel = '片刻'
 homeQuote = '光落在窗上，日子慢慢发亮。'
 ```
 
@@ -593,7 +593,7 @@ projectsURL = '/projects/'
 homeBrand = 'Yu'
 homeTagline = 'A quiet Hugo theme for personal journals'
 homeKicker = 'Welcome to Yu'
-homeTitle = '把日子过成诗，把记录留给未来'
+homeTitle = '日子很长，慢慢记。'
 homeDescription = '这里适合记录生活、想法、照片和那些值得慢慢保存的瞬间。'
 
 [outputs]
@@ -656,10 +656,10 @@ homeTagline = 'A quiet Hugo theme for personal journals'
 homeKicker = 'Welcome to Yu'
 homeTitle = '把日子过成诗，把记录留给未来'
 homeDescription = '这里适合记录生活、想法、照片和那些值得慢慢保存的瞬间。'
-homeNote = '记录平凡生活中的微小而确定的幸福。'
+homeNote = '把今天写下来，留给明天慢慢看。'
 homePhotoNote = '照片会慢慢长成时间的索引。'
 homeDailyNote = '一些不必写成长文的片刻，也值得被保存。'
-homeQuoteLabel = '小确幸'
+homeQuoteLabel = '片刻'
 homeQuote = '光落在窗上，日子慢慢发亮。'
 ```
 

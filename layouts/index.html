@@ -41,34 +41,22 @@
     <aside class="home-brand-panel" aria-label="站点简介">
       <div class="home-brand-mark">{{ site.Params.homebrand | default site.Title }}</div>
       <p class="home-tagline">{{ site.Params.hometagline | default "A quiet Hugo theme for personal journals" }}</p>
-      <ul class="home-quick-list" aria-label="内容类型">
-        <li>
-          <span aria-hidden="true">文</span>
-          <span>文章</span>
-        </li>
-        <li>
-          <span aria-hidden="true">照</span>
-          <span>照片</span>
-        </li>
-        <li>
-          <span aria-hidden="true">记</span>
-          <span>日常</span>
-        </li>
-        <li>
-          <span aria-hidden="true">家</span>
-          <span>家人</span>
-        </li>
-      </ul>
-      <p class="home-side-note">{{ site.Params.homenote | default "记录平凡生活中的微小而确定的幸福。" }}</p>
+      <nav class="home-quick-list" aria-label="内容捷径">
+        {{ with site.GetPage "posts" }}<a href="{{ .RelPermalink }}"><span aria-hidden="true">文</span><span>文章</span></a>{{ else }}<a href="{{ "posts/" | relURL }}"><span aria-hidden="true">文</span><span>文章</span></a>{{ end }}
+        {{ with site.GetPage "albums" }}<a href="{{ .RelPermalink }}"><span aria-hidden="true">照</span><span>照片</span></a>{{ end }}
+        {{ with site.GetPage "moments" }}<a href="{{ .RelPermalink }}"><span aria-hidden="true">记</span><span>日常</span></a>{{ end }}
+        {{ with site.GetPage "about" }}<a href="{{ .RelPermalink }}"><span aria-hidden="true">人</span><span>关于</span></a>{{ end }}
+      </nav>
+      <p class="home-side-note">{{ site.Params.homenote | default "把今天写下来，留给明天慢慢看。" }}</p>
     </aside>
 
     <div class="home-stage">
       <div class="home-intro">
         <p class="home-kicker">{{ site.Params.homekicker | default "Welcome to Yu" }}</p>
-        <h1 id="home-title">{{ site.Params.hometitle | default "把日子过成诗，把记录留给未来" }}</h1>
+        <h1 id="home-title">{{ site.Params.hometitle | default "日子很长，慢慢记。" }}</h1>
         <p>{{ site.Params.homedescription | default site.Params.description | default "这里适合记录生活、想法、照片和那些值得慢慢保存的瞬间。" }}</p>
         <div class="home-actions">
-          {{ with $latestPost }}<a class="home-primary" href="{{ .RelPermalink }}">开始阅读</a>{{ end }}
+          <a class="home-primary" href="{{ "posts/" | relURL }}">开始阅读</a>
           {{ with site.GetPage "albums" }}<a class="home-secondary" href="{{ .RelPermalink }}">看看相册</a>{{ end }}
         </div>
       </div>
@@ -89,10 +77,10 @@
         {{ if ge (len $albumImages) 1 }}
           {{ with $album }}<a class="home-photo" href="{{ .RelPermalink }}" style="background-image: url('{{ index $albumImages 0 }}')"><span>{{ .Title }}</span></a>{{ end }}
         {{ else }}
-          <div class="home-note-card">
+          {{ with site.GetPage "albums" }}<a class="home-note-card" href="{{ .RelPermalink }}">{{ else }}<div class="home-note-card">{{ end }}
             <span>照片</span>
             <strong>{{ site.Params.homephotonote | default "照片会慢慢长成时间的索引。" }}</strong>
-          </div>
+          {{ with site.GetPage "albums" }}</a>{{ else }}</div>{{ end }}
         {{ end }}
 
         {{ if ge (len $albumImages) 2 }}
@@ -108,10 +96,10 @@
           {{ end }}
         {{ end }}
 
-        <div class="home-quote-card">
-          <span>{{ site.Params.homequotelabel | default "小确幸" }}</span>
+        {{ with site.GetPage "moments" }}<a class="home-quote-card" href="{{ .RelPermalink }}">{{ else }}<div class="home-quote-card">{{ end }}
+          <span>{{ site.Params.homequotelabel | default "片刻" }}</span>
           <strong>{{ site.Params.homequote | default site.Params.homenote | default "光落在窗上，日子慢慢发亮。" }}</strong>
-        </div>
+        {{ with site.GetPage "moments" }}</a>{{ else }}</div>{{ end }}
       </div>
     </div>
   </section>
@@ -120,7 +108,7 @@
     <section class="home-latest" aria-labelledby="latest-title">
       <div class="home-section-head">
         <h2 id="latest-title">最新文章</h2>
-        {{ with site.GetPage "posts" }}<a href="{{ .RelPermalink }}">查看全部</a>{{ end }}
+        {{ with site.GetPage "posts" }}<a href="{{ .RelPermalink }}">查看全部</a>{{ else }}<a href="{{ "posts/" | relURL }}">查看全部</a>{{ end }}
       </div>
       <ul class="home-post-grid">
         {{ range $latestPosts }}
