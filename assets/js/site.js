@@ -46,7 +46,9 @@
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   if (siteHeader || readingProgress || backToTop) {
+    let scrollFrame = 0;
     const updateScrollState = () => {
+      scrollFrame = 0;
       siteHeader?.classList.toggle("is-scrolled", window.scrollY > 8);
       backToTop?.classList.toggle("is-visible", window.scrollY > 360);
 
@@ -56,10 +58,15 @@
         readingProgress.style.setProperty("--reading-progress", progress.toFixed(4));
       }
     };
+    const requestScrollState = () => {
+      if (!scrollFrame) {
+        scrollFrame = window.requestAnimationFrame(updateScrollState);
+      }
+    };
 
     updateScrollState();
-    window.addEventListener("scroll", updateScrollState, { passive: true });
-    window.addEventListener("resize", updateScrollState);
+    window.addEventListener("scroll", requestScrollState, { passive: true });
+    window.addEventListener("resize", requestScrollState);
   }
 
   if (backToTop) {
@@ -146,29 +153,43 @@
       }, 260);
     };
 
+    const openZoom = (image) => {
+      if (activeImage || isClosing) {
+        return;
+      }
+
+      activeImage = image;
+      overlay.classList.remove("is-open", "is-animating");
+      zoomedImage.src = image.dataset.full || image.currentSrc || image.src;
+      zoomedImage.alt = image.alt || "";
+      setImageRect(image.getBoundingClientRect());
+      overlay.classList.add("is-visible");
+      document.body.classList.add("image-zoom-open");
+      zoomedImage.getBoundingClientRect();
+
+      requestAnimationFrame(() => {
+        image.classList.add("is-zoom-source");
+        overlay.classList.add("is-animating");
+        setImageRect(getTargetRect(image));
+        overlay.classList.add("is-open");
+      });
+    };
+
     zoomableImages.forEach((image) => {
       image.classList.add("is-zoomable");
-      image.addEventListener("click", () => {
-        if (activeImage || isClosing) {
-          return;
-        }
+      image.addEventListener("click", () => openZoom(image));
 
-        activeImage = image;
-        overlay.classList.remove("is-open", "is-animating");
-        zoomedImage.src = image.dataset.full || image.currentSrc || image.src;
-        zoomedImage.alt = image.alt || "";
-        setImageRect(image.getBoundingClientRect());
-        overlay.classList.add("is-visible");
-        document.body.classList.add("image-zoom-open");
-        zoomedImage.getBoundingClientRect();
-
-        requestAnimationFrame(() => {
-          image.classList.add("is-zoom-source");
-          overlay.classList.add("is-animating");
-          setImageRect(getTargetRect(image));
-          overlay.classList.add("is-open");
+      if (!image.closest("a, button")) {
+        image.tabIndex = 0;
+        image.setAttribute("role", "button");
+        image.setAttribute("aria-label", image.alt ? `放大图片：${image.alt}` : "放大图片");
+        image.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openZoom(image);
+          }
         });
-      });
+      }
     });
 
     overlay.addEventListener("click", closeZoom);

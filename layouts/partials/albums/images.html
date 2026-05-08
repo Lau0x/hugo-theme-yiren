@@ -1,0 +1,40 @@
+{{- $page := .page -}}
+{{- $resources := sort ($page.Resources.ByType "image") "Name" "asc" -}}
+{{- $configured := $page.Params.images | default slice -}}
+{{- $items := slice -}}
+{{- $used := slice -}}
+
+{{- if reflect.IsSlice $configured -}}
+  {{- range $configured -}}
+    {{- $entry := . -}}
+    {{- $src := "" -}}
+    {{- $title := "" -}}
+    {{- $caption := "" -}}
+    {{- $alt := "" -}}
+    {{- if reflect.IsMap $entry -}}
+      {{- $src = or $entry.src $entry.file $entry.image $entry.name -}}
+      {{- $title = $entry.title | default "" -}}
+      {{- $caption = $entry.caption | default "" -}}
+      {{- $alt = $entry.alt | default "" -}}
+    {{- else -}}
+      {{- $src = $entry -}}
+    {{- end -}}
+    {{- with $src -}}
+      {{- $resourcePath := (urls.Parse .).Path | replaceRE "^\\./" "" -}}
+      {{- with $page.Resources.GetMatch $resourcePath -}}
+        {{- $fallbackTitle := replaceRE "\\.[^.]+$" "" .Name -}}
+        {{- $items = $items | append (dict "resource" . "title" ($title | default $fallbackTitle) "caption" $caption "alt" ($alt | default ($title | default $fallbackTitle))) -}}
+        {{- $used = $used | append .Name -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- range $resources -}}
+  {{- if not (in $used .Name) -}}
+    {{- $title := replaceRE "\\.[^.]+$" "" .Name -}}
+    {{- $items = $items | append (dict "resource" . "title" $title "caption" "" "alt" $title) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- return $items -}}

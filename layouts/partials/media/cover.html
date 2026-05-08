@@ -7,7 +7,15 @@
 {{- $source := "" -}}
 {{- with $page.Params.images -}}
   {{- if reflect.IsSlice . -}}
-    {{- with index . 0 -}}{{- $source = . -}}{{- end -}}
+    {{- with index . 0 -}}
+      {{- if reflect.IsMap . -}}
+        {{- $source = or .src .file .image .name -}}
+      {{- else -}}
+        {{- $source = . -}}
+      {{- end -}}
+    {{- end -}}
+  {{- else if reflect.IsMap . -}}
+    {{- $source = or .src .file .image .name -}}
   {{- else -}}
     {{- $source = . -}}
   {{- end -}}
@@ -24,7 +32,7 @@
   {{- $resourcePath := (urls.Parse $source).Path | replaceRE "^\\./" "" -}}
   {{- with $page.Resources.GetMatch $resourcePath -}}{{- $resource = . -}}{{- end -}}
 {{- else if $fallbackResource -}}
-  {{- with index ($page.Resources.ByType "image") 0 -}}
+  {{- with index (sort ($page.Resources.ByType "image") "Name" "asc") 0 -}}
     {{- $resource = . -}}
     {{- $source = .RelPermalink -}}
   {{- end -}}

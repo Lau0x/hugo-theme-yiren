@@ -8,7 +8,7 @@
   {{ if $albums }}
     <ul class="album-list">
       {{ range $albums }}
-        {{ $images := .Resources.ByType "image" }}
+        {{ $images := partial "albums/images.html" (dict "page" .) }}
         {{ $cover := partial "media/cover.html" (dict "page" . "size" "520x360 webp q82") }}
         <li class="album-item">
           <a class="album-card{{ if not $cover }} no-cover{{ end }}" href="{{ .RelPermalink }}">

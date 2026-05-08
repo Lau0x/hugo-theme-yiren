@@ -1191,6 +1191,20 @@ a:hover {
   margin: 0 0 0.9rem;
 }
 
+.gallery-caption {
+  color: var(--muted);
+  display: grid;
+  font-size: 0.84rem;
+  gap: 0.15rem;
+  line-height: 1.55;
+  padding: 0.55rem 0.15rem 0;
+}
+
+.gallery-caption strong {
+  color: var(--fg-soft);
+  font-weight: 600;
+}
+
 .gallery-image {
   border-radius: var(--radius);
   box-shadow: var(--shadow-sm);
@@ -1458,6 +1472,12 @@ a:hover {
 
 .prose img.is-zoomable:hover {
   opacity: 0.92;
+}
+
+.prose img.is-zoomable:focus-visible,
+.gallery-image.is-zoomable:focus-visible {
+  outline: 3px solid var(--amber);
+  outline-offset: 4px;
 }
 
 .prose img.is-zoom-source {

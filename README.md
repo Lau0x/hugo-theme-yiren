@@ -357,10 +357,22 @@ draft: false
 description: 几张日常照片。
 location: 示例城市
 private: false
+cover: 02.jpg
+images:
+  - src: 02.jpg
+    title: 林间小路
+    caption: 手动排序的第一张照片，也可以作为相册封面。
+  - src: 01.jpg
+    title: 山边的光
+    caption: 每张照片都可以写一小句说明。
 ---
 
 这里是相册说明。
 ```
+
+相册图片默认按文件名排序。写了 `images` 列表后，主题会优先按列表顺序展示，并读取每张图的 `title`、`caption` 和 `alt`。没有写进列表的图片仍会按文件名排在后面。
+
+`cover` 可以手动指定相册列表页封面；如果不写，主题会使用第一张图片。
 
 `private: true` 的相册不会出现在公开相册列表里。注意：这只是主题层面的隐藏，不是安全加密；不要把真正敏感的照片公开部署。
 
@@ -749,6 +761,28 @@ content/albums/spring-walk/
   01.jpg
   02.jpg
 ```
+
+Album front matter can set a manual cover and per-photo metadata:
+
+```yaml
+---
+title: Spring Walk
+date: 2026-05-08T10:00:00+08:00
+description: A few daily photos.
+location: Example City
+private: false
+cover: 02.jpg
+images:
+  - src: 02.jpg
+    title: Path Through Trees
+    caption: The first photo in this list is shown first.
+  - src: 01.jpg
+    title: Light by the Hill
+    caption: Captions are displayed under gallery images.
+---
+```
+
+Images are sorted by filename by default. When `images` is set, Yu shows listed images first in that order and uses `title`, `caption`, and `alt` when present. Unlisted images are appended by filename.
 
 Albums with `private: true` are hidden from the public album list. This is not access control; do not deploy sensitive photos publicly unless your hosting layer protects them.
 

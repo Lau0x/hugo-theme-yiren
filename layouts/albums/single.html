@@ -13,13 +13,19 @@
     <div class="prose album-intro">{{ . }}</div>
   {{ end }}
 
-  {{ $images := .Resources.ByType "image" }}
+  {{ $images := partial "albums/images.html" (dict "page" .) }}
   {{ if $images }}
     <div class="gallery-grid">
       {{ range $images }}
-        {{ $title := replaceRE "\\.[^.]+$" "" .Name }}
+        {{ $image := .resource }}
         <figure class="gallery-item">
-          {{ partial "media/responsive-image.html" (dict "resource" . "class" "gallery-image" "alt" $title "sizes" "(max-width: 640px) calc(100vw - 2.2rem), 50vw") }}
+          {{ partial "media/responsive-image.html" (dict "resource" $image "class" "gallery-image" "alt" .alt "title" .title "sizes" "(max-width: 640px) calc(100vw - 2.2rem), 50vw") }}
+          {{ if or .title .caption }}
+            <figcaption class="gallery-caption">
+              {{ with .title }}<strong>{{ . }}</strong>{{ end }}
+              {{ with .caption }}<span>{{ . }}</span>{{ end }}
+            </figcaption>
+          {{ end }}
         </figure>
       {{ end }}
     </div>
