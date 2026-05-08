@@ -2,39 +2,69 @@
 
 Yu is a quiet Hugo theme for personal journals, family notes, photo stories, and long-form writing. It focuses on a narrow reading column, warm paper-like background, cover cards, Chinese typography, article table of contents, lightweight search, and Medium-style image zoom.
 
-## Features
+中文说明见下方，English documentation follows after the Chinese section.
 
-- Sticky translucent header
-- Post cards with cover image gradient overlay
-- Automatic home card cover from the first Markdown image
-- Chinese-friendly typography with LXGW WenKai
-- Article reading time and wide-screen table of contents
-- System dark mode with a manual toggle
-- Moments section for short micro-posts
-- Friends link page powered by `data/links.yaml`
-- Public album section using Hugo page bundles
-- Click-to-zoom article images
-- Code block copy button
-- JSON-powered local search
-- SEO metadata, Open Graph cards, Twitter cards, and JSON-LD
-- Pluggable comments: Cusdis, Giscus, Waline, or Twikoo
-- Tags and taxonomy pages
+## 功能特性
 
-## Install
+- 毛玻璃吸顶导航
+- 首页文章卡片，支持封面渐变遮罩
+- 未设置封面时，自动使用正文第一张 Markdown 图片
+- 适合中文阅读的 LXGW WenKai 字体
+- 文章阅读时间和宽屏目录
+- 跟随系统的深色模式，并支持手动切换
+- 说说页面，适合短记录和碎片想法
+- 友情链接页面，数据来自 `data/links.yaml`
+- 公开相册，基于 Hugo page bundle
+- 文章和相册图片点击放大
+- 代码块复制按钮
+- 本地 JSON 搜索
+- SEO、Open Graph、Twitter Card、JSON-LD
+- 可插拔评论系统：Cusdis、Giscus、Waline、Twikoo
+- 标签和 taxonomy 页面
 
-Add the theme to your Hugo site:
+## 新手从零部署
+
+下面是一条尽量完整的新手路线：从安装 Hugo，到本地预览，再到 Cloudflare Pages 自动部署。
+
+### 1. 安装 Hugo
+
+macOS 可以用 Homebrew：
+
+```bash
+brew install hugo
+```
+
+检查是否安装成功：
+
+```bash
+hugo version
+```
+
+建议使用 Hugo Extended 版本，最低版本要求见 `theme.toml`。
+
+### 2. 创建一个新站点
+
+```bash
+hugo new site myblog
+cd myblog
+git init
+```
+
+### 3. 安装主题
 
 ```bash
 git submodule add https://github.com/Lau0x/hugo-theme-yu.git themes/yu
 ```
 
-Set the theme in `hugo.toml`:
+在 `hugo.toml` 中启用主题：
 
 ```toml
 theme = 'yu'
 ```
 
-## Basic Config
+### 4. 写基础配置
+
+把 `hugo.toml` 改成类似这样：
 
 ```toml
 baseURL = 'https://example.org/'
@@ -53,31 +83,286 @@ projectsURL = '/projects/'
 
 [outputs]
 home = ['HTML', 'RSS', 'JSON']
+
+[taxonomies]
+tag = 'tags'
+category = 'categories'
 ```
 
-## Configuration
+### 5. 创建搜索页
 
-Common `params`:
+```bash
+hugo new search.md
+```
+
+把 `content/search.md` 改成：
+
+```toml
++++
+title = '搜索'
+layout = 'search'
++++
+```
+
+### 6. 创建第一篇文章
+
+```bash
+hugo new posts/hello-world.md
+```
+
+打开 `content/posts/hello-world.md`，把 `draft` 改为 `false`，然后写正文：
+
+```yaml
+---
+title: Hello World
+date: 2026-05-08T10:00:00+08:00
+draft: false
+description: My first post.
+tags:
+  - note
+cover:
+---
+
+Hello, Hugo.
+```
+
+### 7. 本地预览
+
+```bash
+hugo server -D
+```
+
+然后打开：
+
+```text
+http://localhost:1313/
+```
+
+### 8. 提交到 GitHub
+
+```bash
+git add -A
+git commit -m "Initial site"
+git branch -M main
+git remote add origin git@github.com:your-name/your-blog.git
+git push -u origin main
+```
+
+### 9. 用 Cloudflare Pages 部署
+
+在 Cloudflare Pages 新建项目，连接你的 GitHub 仓库，构建设置如下：
+
+```text
+Build command: hugo
+Build output directory: public
+Root directory: /
+```
+
+不要提交 `public/`。建议 `.gitignore` 加上：
+
+```gitignore
+.DS_Store
+.hugo_build.lock
+public/
+resources/
+```
+
+之后你每次写完文章，只需要提交并推送源码，Cloudflare Pages 会自动构建。
+
+## 常用内容
+
+### 文章封面
+
+文章 front matter 支持 `cover`、`image` 或 `images`：
+
+```yaml
+---
+title: Hello World
+date: 2026-05-08T10:00:00+08:00
+draft: false
+description: A short summary for search engines and social previews.
+cover: /uploads/cover.jpg
+tags:
+  - note
+---
+```
+
+如果没有设置封面，首页卡片和分享卡片会自动使用正文第一张 Markdown 图片。
+
+### 说说
+
+创建说说索引页：
+
+```bash
+mkdir -p content/moments
+```
+
+创建 `content/moments/_index.md`：
+
+```yaml
+---
+title: 说说
+---
+
+一些不需要展开成文章的零碎记录。
+```
+
+创建一条说说：
+
+```bash
+hugo new moments/2026-05-08-note.md
+```
+
+示例：
+
+```yaml
+---
+title: "2026-05-08 09:00"
+date: 2026-05-08T09:00:00+08:00
+draft: false
+mood: 随手记
+---
+
+今天随手记一笔。
+```
+
+### 友情链接
+
+创建 `content/links/_index.md`：
+
+```yaml
+---
+title: 友情链接
+---
+
+一些值得常去看看的地方。
+```
+
+然后创建 `data/links.yaml`：
+
+```yaml
+- name: Hugo
+  url: https://gohugo.io/
+  description: 快速、灵活的静态网站生成器。
+```
+
+### 相册
+
+创建相册索引页：
+
+```bash
+mkdir -p content/albums
+```
+
+创建 `content/albums/_index.md`：
+
+```yaml
+---
+title: 相册
+---
+
+一些日常照片和路上的片段。
+```
+
+每个相册是一个 page bundle：
+
+```text
+content/albums/spring-walk/
+  index.md
+  01.jpg
+  02.jpg
+```
+
+`index.md` 示例：
+
+```yaml
+---
+title: 春日散步
+date: 2026-05-08T10:00:00+08:00
+draft: false
+description: 几张日常照片。
+location: 示例城市
+private: false
+---
+
+这里是相册说明。
+```
+
+`private: true` 的相册不会出现在公开相册列表里。注意：这只是主题层面的隐藏，不是安全加密；不要把真正敏感的照片公开部署。
+
+### 关于页
+
+创建：
+
+```bash
+hugo new about.md
+```
+
+示例：
+
+```yaml
+---
+title: 关于
+url: /about/
+---
+
+这里写你的介绍。
+```
+
+### 独立 HTML 页面
+
+如果你想写一个完全不依赖主题的静态页面，可以放在 `static/`：
+
+```text
+static/projects/index.html
+```
+
+访问地址就是：
+
+```text
+/projects/
+```
+
+如果想在导航中显示项目页：
 
 ```toml
 [params]
-lang = 'zh-CN'
-description = 'A short site description used for SEO fallback text.'
-author = 'Example Author'
-footer = '© 2026 Example Author'
-mainSections = ['posts']
 projectsURL = '/projects/'
 ```
 
-- `description`: default meta description when a page has no description or summary.
-- `author`: used in the footer and structured metadata.
-- `footer`: custom footer text.
-- `mainSections`: sections shown on the home page.
-- `projectsURL`: optional nav link for a standalone static project page.
+### 自定义 URL
 
-## Comments
+只改最后一段路径：
 
-Comments are disabled by default. Set `params.comments.provider` to enable one comment system.
+```yaml
+---
+title: Hello World
+slug: hello-world
+---
+```
+
+完全指定路径：
+
+```yaml
+---
+title: Project Hub
+url: /projects/maker-tools/
+---
+```
+
+旧链接跳转：
+
+```yaml
+---
+title: New Page
+aliases:
+  - /old/path/
+---
+```
+
+## 评论系统
+
+默认不启用评论。配置 `params.comments.provider` 后才会显示评论区。
 
 ### Cusdis
 
@@ -90,8 +375,6 @@ appId = 'your-cusdis-app-id'
 host = 'https://cusdis.com'
 lang = 'zh-cn'
 ```
-
-Cusdis is a lightweight option for low-friction comments.
 
 ### Giscus
 
@@ -111,7 +394,7 @@ theme = 'preferred_color_scheme'
 lang = 'zh-CN'
 ```
 
-Giscus stores comments in GitHub Discussions, so visitors need a GitHub account.
+Giscus 使用 GitHub Discussions，访客需要 GitHub 账号。
 
 ### Waline
 
@@ -124,7 +407,7 @@ serverURL = 'https://your-waline-server.example.com'
 lang = 'zh-CN'
 ```
 
-Waline requires a backend service, but gives you more control over data and login options.
+Waline 需要后端服务和数据库，但数据更可控。
 
 ### Twikoo
 
@@ -137,156 +420,23 @@ envId = 'https://your-twikoo-server.example.com'
 lang = 'zh-CN'
 ```
 
-Twikoo also requires a backend service and can be self-hosted.
+Twikoo 也需要后端服务，可以自托管。
 
-Create `content/search.md` to enable the search page:
+## SEO 和分享
 
-```toml
-+++
-title = '搜索'
-layout = 'search'
-+++
-```
+主题会自动生成：
 
-## Post Cover
-
-Use `cover`, `image`, or `images` in front matter:
-
-```toml
-+++
-title = '周刊 186'
-date = '2026-04-18T10:45:00+08:00'
-cover = '/uploads/cover.jpg'
-tags = ['周刊', '创客']
-+++
-```
-
-If no cover is set, the home card will use the first Markdown image in the post body.
-
-`cover`, `image`, or the first value in `images` is also used for Open Graph and Twitter preview cards.
-
-## SEO And Sharing
-
-The theme generates:
-
-- `<title>` and meta description
+- `<title>` 和 meta description
 - canonical URL
 - Open Graph metadata
 - Twitter Card metadata
-- article published/modified time
-- article tags
-- JSON-LD structured data
+- 文章发布时间和更新时间
+- 文章标签
+- JSON-LD 结构化数据
 
-For best sharing previews, add a page description and cover image:
+建议每篇文章设置 `description` 和 `cover`。如果不设置，主题会使用页面摘要和正文第一张 Markdown 图片兜底。
 
-```yaml
----
-title: Hello World
-description: A short summary for search engines and social previews.
-cover: /uploads/cover.jpg
-tags:
-  - note
----
-```
-
-## Moments
-
-Create short notes under `content/moments`:
-
-```bash
-hugo new moments/2026-05-08-note.md
-```
-
-The note body is rendered directly on `/moments/`, so it works well for quick thoughts, photos, or small updates:
-
-```yaml
----
-title: "2026-05-08 09:00"
-date: 2026-05-08T09:00:00+08:00
-draft: false
-mood: 随手记
----
-
-今天随手记一笔。
-```
-
-## Friends Links
-
-Create `content/links/_index.md`:
-
-```yaml
----
-title: 友情链接
----
-```
-
-Then add links in `data/links.yaml`:
-
-```yaml
-- name: Hugo
-  url: https://gohugo.io/
-  description: 快速、灵活的静态网站生成器。
-```
-
-## Albums
-
-Create `content/albums/_index.md` to enable the album page:
-
-```yaml
----
-title: 相册
----
-```
-
-Each album should be a page bundle:
-
-```text
-content/albums/spring-walk/
-  index.md
-  01.jpg
-  02.jpg
-```
-
-The album front matter:
-
-```yaml
----
-title: 春日散步
-date: 2026-05-08T10:00:00+08:00
-draft: false
-description: 几张日常照片。
-location: 示例城市
-private: false
----
-```
-
-Albums with `private: true` are hidden from the public album list. This only hides them from theme rendering; do not deploy sensitive photos publicly unless you protect them at the hosting layer.
-
-## Custom URLs And Static Pages
-
-Use `slug` to customize the final path segment:
-
-```yaml
----
-title: Hello World
-slug: hello-world
----
-```
-
-Use `url` to customize the full path:
-
-```yaml
----
-title: Project Hub
-url: /projects/maker-tools/
----
-```
-
-For a completely standalone HTML page, put it under `static`, for example `static/projects/index.html`. It will be available at `/projects/`.
-
-## Content Structure
-
-A typical site can look like this:
+## 内容结构示例
 
 ```text
 content/
@@ -312,7 +462,90 @@ static/
     index.html
 ```
 
-## Deploy On Cloudflare Pages
+## 预览 exampleSite
+
+在包含 `hugo-theme-yu` 的上级目录运行：
+
+```bash
+hugo server --source hugo-theme-yu/exampleSite --themesDir . --theme hugo-theme-yu -D
+```
+
+---
+
+## English
+
+## Features
+
+- Sticky translucent header
+- Post cards with cover image gradient overlay
+- Automatic home card cover from the first Markdown image
+- Chinese-friendly typography with LXGW WenKai
+- Article reading time and wide-screen table of contents
+- System dark mode with a manual toggle
+- Moments section for short micro-posts
+- Friends link page powered by `data/links.yaml`
+- Public album section using Hugo page bundles
+- Click-to-zoom article images
+- Code block copy button
+- JSON-powered local search
+- SEO metadata, Open Graph cards, Twitter cards, and JSON-LD
+- Pluggable comments: Cusdis, Giscus, Waline, or Twikoo
+- Tags and taxonomy pages
+
+## Quick Start
+
+Install Hugo, create a site, and add the theme:
+
+```bash
+hugo new site myblog
+cd myblog
+git init
+git submodule add https://github.com/Lau0x/hugo-theme-yu.git themes/yu
+```
+
+Set the theme in `hugo.toml`:
+
+```toml
+theme = 'yu'
+```
+
+Basic config:
+
+```toml
+baseURL = 'https://example.org/'
+locale = 'zh-CN'
+title = 'Example Blog'
+theme = 'yu'
+summaryLength = 36
+
+[params]
+lang = 'zh-CN'
+description = 'A Hugo example site'
+author = 'Example Author'
+footer = '© 2026 Example Author'
+mainSections = ['posts']
+projectsURL = '/projects/'
+
+[outputs]
+home = ['HTML', 'RSS', 'JSON']
+```
+
+Create the search page:
+
+```toml
++++
+title = 'Search'
+layout = 'search'
++++
+```
+
+Preview locally:
+
+```bash
+hugo server -D
+```
+
+## Cloudflare Pages
 
 Use these build settings:
 
@@ -322,7 +555,88 @@ Build output directory: public
 Root directory: /
 ```
 
-Make sure `public/` is not committed. Let Cloudflare Pages build it from the source files.
+Do not commit `public/`. Let Cloudflare Pages build it from source.
+
+## Posts
+
+Use `cover`, `image`, or `images` in front matter:
+
+```yaml
+---
+title: Hello World
+date: 2026-05-08T10:00:00+08:00
+draft: false
+description: A short summary for search engines and social previews.
+cover: /uploads/cover.jpg
+tags:
+  - note
+---
+```
+
+If no cover is set, the home card and sharing metadata will use the first Markdown image in the post body.
+
+## Moments
+
+Create `content/moments/_index.md`:
+
+```yaml
+---
+title: Moments
+---
+```
+
+Then create short notes under `content/moments`.
+
+## Friends Links
+
+Create `content/links/_index.md`, then add links in `data/links.yaml`:
+
+```yaml
+- name: Hugo
+  url: https://gohugo.io/
+  description: A fast and flexible static site generator.
+```
+
+## Albums
+
+Each album should be a page bundle:
+
+```text
+content/albums/spring-walk/
+  index.md
+  01.jpg
+  02.jpg
+```
+
+Albums with `private: true` are hidden from the public album list. This is not access control; do not deploy sensitive photos publicly unless your hosting layer protects them.
+
+## Comments
+
+Comments are disabled by default. Set `params.comments.provider` to enable one comment system.
+
+Supported providers:
+
+- `cusdis`
+- `giscus`
+- `waline`
+- `twikoo`
+
+Waline example:
+
+```toml
+[params.comments]
+provider = 'waline'
+
+[params.comments.waline]
+serverURL = 'https://your-waline-server.example.com'
+lang = 'zh-CN'
+```
+
+## Custom URLs And Static Pages
+
+Use `slug`, `url`, and `aliases` in front matter to customize URLs.
+
+For a completely standalone HTML page, put it under `static`, for example `static/projects/index.html`. It will be available at `/projects/`.
 
 ## Preview Example Site
 
