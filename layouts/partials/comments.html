@@ -43,6 +43,22 @@
     <script type="module">
       import { init } from "{{ $config.js | default "https://unpkg.com/@waline/client@v3/dist/waline.js" }}";
 
+      const walineEl = document.querySelector("#waline");
+      const showWalineFallback = () => {
+        if (!walineEl || walineEl.querySelector(".waline-timeout")) return;
+
+        const loading = walineEl.querySelector(".wl-loading");
+        if (!loading) return;
+
+        loading.setAttribute("hidden", "");
+        const message = document.createElement("p");
+        message.className = "waline-timeout";
+        message.textContent = "评论加载有点慢，可以刷新页面或稍后再试。";
+        loading.insertAdjacentElement("afterend", message);
+      };
+
+      window.setTimeout(showWalineFallback, {{ $config.timeout | default 12000 }});
+
       init({
         el: "#waline",
         serverURL: "{{ . }}",
