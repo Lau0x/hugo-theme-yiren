@@ -9,6 +9,7 @@ Yiren is a quiet Hugo theme for Chinese personal blogs and weekly digests. It fo
 - Automatic home card cover from the first Markdown image
 - Chinese-friendly typography with LXGW WenKai
 - Article reading time and wide-screen table of contents
+- System dark mode with a manual toggle
 - Click-to-zoom article images
 - Code block copy button
 - JSON-powered local search

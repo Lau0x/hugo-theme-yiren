@@ -1,4 +1,38 @@
 (() => {
+  const themeToggle = document.querySelector(".theme-toggle");
+  const themeMedia = window.matchMedia("(prefers-color-scheme: dark)");
+
+  const getStoredTheme = () => {
+    const theme = localStorage.getItem("yiren-theme");
+    return theme === "dark" || theme === "light" ? theme : "";
+  };
+
+  const getEffectiveTheme = () => getStoredTheme() || (themeMedia.matches ? "dark" : "light");
+
+  const applyTheme = (theme) => {
+    if (theme === "dark" || theme === "light") {
+      document.documentElement.dataset.theme = theme;
+      localStorage.setItem("yiren-theme", theme);
+    } else {
+      document.documentElement.removeAttribute("data-theme");
+      localStorage.removeItem("yiren-theme");
+    }
+
+    if (themeToggle) {
+      const mode = getEffectiveTheme();
+      const nextMode = mode === "dark" ? "浅色" : "深色";
+      themeToggle.dataset.mode = mode;
+      themeToggle.setAttribute("aria-label", `切换到${nextMode}模式`);
+      themeToggle.setAttribute("title", `切换到${nextMode}模式`);
+    }
+  };
+
+  applyTheme(getStoredTheme());
+  themeMedia.addEventListener("change", () => applyTheme(getStoredTheme()));
+  themeToggle?.addEventListener("click", () => {
+    applyTheme(getEffectiveTheme() === "dark" ? "light" : "dark");
+  });
+
   const backToTop = document.querySelector(".back-to-top");
 
   if (backToTop) {
