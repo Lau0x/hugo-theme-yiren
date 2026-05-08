@@ -57,5 +57,14 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.20/600.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.20/400.css">
 {{ with .OutputFormats.Get "RSS" }}<link rel="alternate" type="application/rss+xml" href="{{ .RelPermalink }}" title="{{ site.Title }}">{{ end }}
-{{ $css := resources.Get "css/main.css" | minify | fingerprint }}
+{{ $styles := slice
+  (resources.Get "css/base.css")
+  (resources.Get "css/home.css")
+  (resources.Get "css/collections.css")
+  (resources.Get "css/post.css")
+  (resources.Get "css/comments.css")
+  (resources.Get "css/components.css")
+  (resources.Get "css/responsive.css")
+}}
+{{ $css := $styles | resources.Concat "css/yu.css" | minify | fingerprint }}
 <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
