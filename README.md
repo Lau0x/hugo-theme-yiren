@@ -17,6 +17,7 @@ Yu is a quiet Hugo theme for personal journals, family notes, photo stories, and
 - Code block copy button
 - JSON-powered local search
 - SEO metadata, Open Graph cards, Twitter cards, and JSON-LD
+- Pluggable comments: Cusdis, Giscus, Waline, or Twikoo
 - Tags and taxonomy pages
 
 ## Install
@@ -73,6 +74,70 @@ projectsURL = '/projects/'
 - `footer`: custom footer text.
 - `mainSections`: sections shown on the home page.
 - `projectsURL`: optional nav link for a standalone static project page.
+
+## Comments
+
+Comments are disabled by default. Set `params.comments.provider` to enable one comment system.
+
+### Cusdis
+
+```toml
+[params.comments]
+provider = 'cusdis'
+
+[params.comments.cusdis]
+appId = 'your-cusdis-app-id'
+host = 'https://cusdis.com'
+lang = 'zh-cn'
+```
+
+Cusdis is a lightweight option for low-friction comments.
+
+### Giscus
+
+```toml
+[params.comments]
+provider = 'giscus'
+
+[params.comments.giscus]
+repo = 'owner/repo'
+repoId = 'your-repo-id'
+category = 'General'
+categoryId = 'your-category-id'
+mapping = 'pathname'
+reactionsEnabled = '1'
+inputPosition = 'bottom'
+theme = 'preferred_color_scheme'
+lang = 'zh-CN'
+```
+
+Giscus stores comments in GitHub Discussions, so visitors need a GitHub account.
+
+### Waline
+
+```toml
+[params.comments]
+provider = 'waline'
+
+[params.comments.waline]
+serverURL = 'https://your-waline-server.example.com'
+lang = 'zh-CN'
+```
+
+Waline requires a backend service, but gives you more control over data and login options.
+
+### Twikoo
+
+```toml
+[params.comments]
+provider = 'twikoo'
+
+[params.comments.twikoo]
+envId = 'https://your-twikoo-server.example.com'
+lang = 'zh-CN'
+```
+
+Twikoo also requires a backend service and can be self-hosted.
 
 Create `content/search.md` to enable the search page:
 

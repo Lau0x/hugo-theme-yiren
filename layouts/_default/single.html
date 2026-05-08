@@ -27,13 +27,9 @@
     {{ .Content }}
   </div>
 
-  {{ if site.Params.comments }}
+  {{ if and site.Params.comments site.Params.comments.provider }}
     <section class="comments">
       {{ partial "comments.html" . }}
-    </section>
-  {{ else }}
-    <section class="comments comments-disabled">
-      <p>评论区未开启。配置评论系统后在本页启用。</p>
     </section>
   {{ end }}
 </article>

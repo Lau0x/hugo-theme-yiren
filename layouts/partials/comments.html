@@ -1,1 +1,70 @@
+{{ $comments := site.Params.comments | default dict }}
+{{ $provider := lower ($comments.provider | default "") }}
 
+{{ if eq $provider "cusdis" }}
+  {{ $config := $comments.cusdis | default dict }}
+  {{ $host := $config.host | default "https://cusdis.com" }}
+  {{ with $config.appId }}
+    <div
+      id="cusdis_thread"
+      data-host="{{ $host }}"
+      data-app-id="{{ . }}"
+      data-page-id="{{ $.RelPermalink }}"
+      data-page-url="{{ $.Permalink }}"
+      data-page-title="{{ $.Title }}"
+      {{ with $config.lang }}data-lang="{{ . }}"{{ end }}></div>
+    <script async defer src="{{ $host }}/js/cusdis.es.js"></script>
+  {{ end }}
+{{ else if eq $provider "giscus" }}
+  {{ $config := $comments.giscus | default dict }}
+  {{ if and $config.repo $config.repoId $config.category $config.categoryId }}
+    <script
+      src="https://giscus.app/client.js"
+      data-repo="{{ $config.repo }}"
+      data-repo-id="{{ $config.repoId }}"
+      data-category="{{ $config.category }}"
+      data-category-id="{{ $config.categoryId }}"
+      data-mapping="{{ $config.mapping | default "pathname" }}"
+      data-strict="{{ $config.strict | default "0" }}"
+      data-reactions-enabled="{{ $config.reactionsEnabled | default "1" }}"
+      data-emit-metadata="{{ $config.emitMetadata | default "0" }}"
+      data-input-position="{{ $config.inputPosition | default "bottom" }}"
+      data-theme="{{ $config.theme | default "preferred_color_scheme" }}"
+      data-lang="{{ $config.lang | default "zh-CN" }}"
+      data-loading="{{ $config.loading | default "lazy" }}"
+      crossorigin="anonymous"
+      async></script>
+  {{ end }}
+{{ else if eq $provider "waline" }}
+  {{ $config := $comments.waline | default dict }}
+  {{ with $config.serverURL }}
+    <div id="waline"></div>
+    <link rel="stylesheet" href="{{ $config.css | default "https://unpkg.com/@waline/client@v3/dist/waline.css" }}">
+    <script type="module">
+      import { init } from "{{ $config.js | default "https://unpkg.com/@waline/client@v3/dist/waline.js" }}";
+
+      init({
+        el: "#waline",
+        serverURL: "{{ . }}",
+        path: "{{ $.RelPermalink }}",
+        dark: "{{ $config.dark | default "html[data-theme='dark']" }}"{{ with $config.lang }},
+        lang: "{{ . }}"{{ end }}
+      });
+    </script>
+  {{ end }}
+{{ else if eq $provider "twikoo" }}
+  {{ $config := $comments.twikoo | default dict }}
+  {{ with $config.envId }}
+    <div id="twikoo"></div>
+    <script src="{{ $config.js | default "https://cdn.jsdelivr.net/npm/twikoo@1.6.44/dist/twikoo.all.min.js" }}"></script>
+    <script>
+      twikoo.init({
+        envId: "{{ . }}",
+        el: "#twikoo",
+        path: "{{ $.RelPermalink }}"{{ with $config.region }},
+        region: "{{ . }}"{{ end }}{{ with $config.lang }},
+        lang: "{{ . }}"{{ end }}
+      });
+    </script>
+  {{ end }}
+{{ end }}
