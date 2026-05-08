@@ -1,28 +1,6 @@
-{{ $cover := "" }}
-{{ with .Params.cover }}{{ $cover = . }}{{ end }}
-{{ with .Params.image }}{{ $cover = . }}{{ end }}
-{{ with .Params.images }}{{ with index . 0 }}{{ $cover = . }}{{ end }}{{ end }}
-{{ if not $cover }}
-  {{ with findRESubmatch `!\[[^\]]*\]\(([^)]+)\)` .RawContent 1 }}
-    {{ with index . 0 }}
-      {{ $cover = index . 1 }}
-    {{ end }}
-  {{ end }}
-{{ end }}
-{{ $coverURL := $cover }}
-{{ if $cover }}
-  {{ with .Resources.GetMatch $cover }}
-    {{ if in (slice "jpeg" "jpg" "png" "webp") .MediaType.SubType }}
-      {{ $coverURL = (.Fill "760x520 webp q82").RelPermalink }}
-    {{ else }}
-      {{ $coverURL = .RelPermalink }}
-    {{ end }}
-  {{ else }}
-    {{ $coverURL = $cover | relURL }}
-  {{ end }}
-{{ end }}
+{{ $coverURL := partial "media/cover.html" (dict "page" . "size" "760x520 webp q82") }}
 <li class="post-item">
-  <a class="post-link{{ with $cover }} has-cover{{ end }}" href="{{ .RelPermalink }}">
+  <a class="post-link{{ with $coverURL }} has-cover{{ end }}" href="{{ .RelPermalink }}">
     {{ with $coverURL }}<span class="post-cover-bg" aria-hidden="true" style="background-image:url('{{ . }}')"></span>{{ end }}
     <span class="post-body">
       {{ with .Date }}<time class="post-date" datetime="{{ .Format "2006-01-02" }}">{{ .Format "2006-01-02" }}</time>{{ end }}

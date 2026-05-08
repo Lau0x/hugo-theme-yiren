@@ -1,0 +1,17 @@
+{{- $resource := .resource | default false -}}
+{{- $src := .src | default "" -}}
+{{- $class := .class | default "" -}}
+{{- $alt := .alt | default "" -}}
+{{- $title := .title | default "" -}}
+{{- $sizes := .sizes | default "(max-width: 760px) calc(100vw - 2rem), 720px" -}}
+{{- $rasterTypes := slice "jpeg" "jpg" "png" "webp" -}}
+{{- if and $resource (in $rasterTypes $resource.MediaType.SubType) -}}
+  {{- $small := $resource.Fit "720x720 webp q82" -}}
+  {{- $medium := $resource.Fit "1080x1080 webp q84" -}}
+  {{- $large := $resource.Fit "1440x1440 webp q86" -}}
+  <img{{ with $class }} class="{{ . }}"{{ end }} src="{{ $medium.RelPermalink }}" srcset="{{ $small.RelPermalink }} 720w, {{ $medium.RelPermalink }} 1080w, {{ $large.RelPermalink }} 1440w" sizes="{{ $sizes }}" data-full="{{ $resource.RelPermalink }}" alt="{{ $alt }}" loading="lazy" decoding="async"{{ with $title }} title="{{ . }}"{{ end }}>
+{{- else if $resource -}}
+  <img{{ with $class }} class="{{ . }}"{{ end }} src="{{ $resource.RelPermalink }}" alt="{{ $alt }}" loading="lazy" decoding="async"{{ with $title }} title="{{ . }}"{{ end }}>
+{{- else -}}
+  <img{{ with $class }} class="{{ . }}"{{ end }} src="{{ $src | safeURL }}" alt="{{ $alt }}" loading="lazy" decoding="async" referrerpolicy="no-referrer"{{ with $title }} title="{{ . }}"{{ end }}>
+{{- end -}}

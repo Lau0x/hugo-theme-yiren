@@ -1,0 +1,48 @@
+{{- $page := .page -}}
+{{- $size := .size | default "" -}}
+{{- $mode := .mode | default "Fill" -}}
+{{- $absolute := .absolute | default false -}}
+{{- $fallbackResource := .fallbackResource | default true -}}
+{{- $rasterTypes := slice "jpeg" "jpg" "png" "webp" -}}
+{{- $source := "" -}}
+{{- with $page.Params.images -}}
+  {{- if reflect.IsSlice . -}}
+    {{- with index . 0 -}}{{- $source = . -}}{{- end -}}
+  {{- else -}}
+    {{- $source = . -}}
+  {{- end -}}
+{{- end -}}
+{{- with $page.Params.image -}}{{- $source = . -}}{{- end -}}
+{{- with $page.Params.cover -}}{{- $source = . -}}{{- end -}}
+{{- if not $source -}}
+  {{- with findRESubmatch `!\[[^\]]*\]\(([^)]+)\)` $page.RawContent 1 -}}
+    {{- with index . 0 -}}{{- $source = index . 1 -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $resource := false -}}
+{{- if $source -}}
+  {{- $resourcePath := (urls.Parse $source).Path | replaceRE "^\\./" "" -}}
+  {{- with $page.Resources.GetMatch $resourcePath -}}{{- $resource = . -}}{{- end -}}
+{{- else if $fallbackResource -}}
+  {{- with index ($page.Resources.ByType "image") 0 -}}
+    {{- $resource = . -}}
+    {{- $source = .RelPermalink -}}
+  {{- end -}}
+{{- end -}}
+{{- $url := "" -}}
+{{- if $resource -}}
+  {{- $image := $resource -}}
+  {{- if and $size (in $rasterTypes $resource.MediaType.SubType) -}}
+    {{- if eq $mode "Fit" -}}
+      {{- $image = $resource.Fit $size -}}
+    {{- else if eq $mode "Resize" -}}
+      {{- $image = $resource.Resize $size -}}
+    {{- else -}}
+      {{- $image = $resource.Fill $size -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $url = cond $absolute $image.Permalink $image.RelPermalink -}}
+{{- else if $source -}}
+  {{- $url = cond $absolute ($source | absURL) ($source | relURL) -}}
+{{- end -}}
+{{- return $url -}}

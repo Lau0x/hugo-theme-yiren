@@ -10,34 +10,7 @@
   {{ end }}
 {{ end }}
 {{ $description = $description | plainify | htmlUnescape | replaceRE `\s+` " " | truncate 160 }}
-{{ $imageParam := "" }}
-{{ with .Params.images }}
-  {{ if reflect.IsSlice . }}
-    {{ with index . 0 }}{{ $imageParam = . }}{{ end }}
-  {{ else }}
-    {{ $imageParam = . }}
-  {{ end }}
-{{ end }}
-{{ with .Params.image }}{{ $imageParam = . }}{{ end }}
-{{ with .Params.cover }}{{ $imageParam = . }}{{ end }}
-{{ $image := "" }}
-{{ with $imageParam }}
-  {{ with $.Resources.GetMatch . }}
-    {{ $image = .Permalink }}
-  {{ else }}
-    {{ $image = . | absURL }}
-  {{ end }}
-{{ else }}
-  {{ with index (.Resources.ByType "image") 0 }}
-    {{ $image = .Permalink }}
-  {{ else }}
-    {{ with findRESubmatch `!\[[^\]]*\]\(([^)]+)\)` .RawContent 1 }}
-      {{ with index . 0 }}
-        {{ $image = index . 1 | absURL }}
-      {{ end }}
-    {{ end }}
-  {{ end }}
-{{ end }}
+{{ $image := partial "media/cover.html" (dict "page" . "size" "1200x630 webp q84" "mode" "Fit" "absolute" true) }}
 <title>{{ $title }}</title>
 <meta name="description" content="{{ $description }}">
 <meta name="author" content="{{ site.Params.author | default site.Title }}">

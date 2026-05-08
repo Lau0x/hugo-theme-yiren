@@ -6,11 +6,4 @@
     {{ $resource = . }}
   {{ end }}
 {{ end }}
-{{ if and $resource (in (slice "jpeg" "jpg" "png" "webp") $resource.MediaType.SubType) }}
-  {{ $small := $resource.Fit "720x720 webp q82" }}
-  {{ $medium := $resource.Fit "1080x1080 webp q84" }}
-  {{ $large := $resource.Fit "1440x1440 webp q86" }}
-  <img src="{{ $medium.RelPermalink }}" srcset="{{ $small.RelPermalink }} 720w, {{ $medium.RelPermalink }} 1080w, {{ $large.RelPermalink }} 1440w" sizes="(max-width: 760px) calc(100vw - 2rem), 720px" data-full="{{ $resource.RelPermalink }}" alt="{{ .Text }}" loading="lazy" decoding="async"{{ with .Title }} title="{{ . }}"{{ end }}>
-{{ else }}
-  <img src="{{ $destination | safeURL }}" alt="{{ .Text }}" loading="lazy" decoding="async" referrerpolicy="no-referrer"{{ with .Title }} title="{{ . }}"{{ end }}>
-{{ end }}
+{{ partial "media/responsive-image.html" (dict "resource" $resource "src" $destination "alt" .Text "title" .Title) }}

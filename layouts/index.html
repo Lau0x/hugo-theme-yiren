@@ -21,37 +21,17 @@
     {{ end }}
   {{ end }}
   {{ $featurePost := false }}
-  {{ $featureCover := "" }}
+  {{ $featureCoverURL := "" }}
   {{ range $posts }}
-    {{ if not $featureCover }}
-      {{ $candidateCover := "" }}
-      {{ with .Params.cover }}{{ $candidateCover = . }}{{ end }}
-      {{ with .Params.image }}{{ $candidateCover = . }}{{ end }}
-      {{ with .Params.images }}{{ with index . 0 }}{{ $candidateCover = . }}{{ end }}{{ end }}
-      {{ if not $candidateCover }}
-        {{ with findRESubmatch `!\[[^\]]*\]\(([^)]+)\)` .RawContent 1 }}
-          {{ with index . 0 }}{{ $candidateCover = index . 1 }}{{ end }}
-        {{ end }}
-      {{ end }}
-      {{ if $candidateCover }}
+    {{ if not $featureCoverURL }}
+      {{ $candidateCoverURL := partial "media/cover.html" (dict "page" . "size" "1120x760 webp q84") }}
+      {{ if $candidateCoverURL }}
         {{ $featurePost = . }}
-        {{ $featureCover = $candidateCover }}
+        {{ $featureCoverURL = $candidateCoverURL }}
       {{ end }}
     {{ end }}
   {{ end }}
   {{ if and (not $featurePost) $latestPost }}{{ $featurePost = $latestPost }}{{ end }}
-  {{ $featureCoverURL := $featureCover }}
-  {{ if and $featurePost $featureCover }}
-    {{ with $featurePost.Resources.GetMatch $featureCover }}
-      {{ if in (slice "jpeg" "jpg" "png" "webp") .MediaType.SubType }}
-        {{ $featureCoverURL = (.Fill "1120x760 webp q84").RelPermalink }}
-      {{ else }}
-        {{ $featureCoverURL = .RelPermalink }}
-      {{ end }}
-    {{ else }}
-      {{ $featureCoverURL = $featureCover | relURL }}
-    {{ end }}
-  {{ end }}
 
   <section class="home-hero" aria-labelledby="home-title">
     <aside class="home-brand-panel" aria-label="站点简介">
