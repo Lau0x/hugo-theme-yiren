@@ -6,10 +6,22 @@ Yu is a quiet Hugo theme for personal journals, family notes, photo stories, and
 
 - [中文文档](#中文文档)
 - [English Documentation](#english-documentation)
+- [Waline + Vercel + Neon 评论教程 / Comment Guide](docs/waline-vercel-neon.md)
 
 ---
 
 ## 中文文档
+
+## 中文目录
+
+- [功能特性](#功能特性)
+- [新手从零部署](#新手从零部署)
+- [常用内容](#常用内容)
+- [评论系统](#评论系统)
+- [SEO 和分享](#seo-和分享)
+- [内容结构示例](#内容结构示例)
+- [预览 exampleSite](#预览-examplesite)
+- [Waline + Vercel + Neon 评论教程](docs/waline-vercel-neon.md#中文教程)
 
 ## 功能特性
 
@@ -371,6 +383,8 @@ aliases:
 
 默认不启用评论。配置 `params.comments.provider` 后才会显示评论区。
 
+完整部署教程见：[Waline + Vercel + Neon 评论教程](docs/waline-vercel-neon.md#中文教程)。
+
 ### Cusdis
 
 ```toml
@@ -480,6 +494,20 @@ hugo server --source hugo-theme-yu/exampleSite --themesDir . --theme hugo-theme-
 ---
 
 ## English Documentation
+
+## English Contents
+
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [Cloudflare Pages](#cloudflare-pages)
+- [Posts](#posts)
+- [Moments](#moments)
+- [Friends Links](#friends-links)
+- [Albums](#albums)
+- [Comments](#comments)
+- [Custom URLs And Static Pages](#custom-urls-and-static-pages)
+- [Preview Example Site](#preview-example-site)
+- [Waline + Vercel + Neon Comment Guide](docs/waline-vercel-neon.md#english-guide)
 
 ## Features
 
@@ -620,6 +648,8 @@ Albums with `private: true` are hidden from the public album list. This is not a
 ## Comments
 
 Comments are disabled by default. Set `params.comments.provider` to enable one comment system.
+
+Full setup guide: [Waline + Vercel + Neon Comment Guide](docs/waline-vercel-neon.md#english-guide).
 
 Supported providers:
 
