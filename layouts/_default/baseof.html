@@ -5,6 +5,7 @@
   </head>
   <body>
     <a class="skip-link" href="#main-content">跳到正文</a>
+    {{ if .IsPage }}<div class="reading-progress" aria-hidden="true"></div>{{ end }}
     <div class="site">
       {{ partial "header.html" . }}
       <main id="main-content" class="container main-content{{ if .IsHome }} home-main{{ end }}">

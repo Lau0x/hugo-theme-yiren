@@ -187,7 +187,35 @@ a:hover {
   padding: 1rem 0;
   position: sticky;
   top: 0;
+  transition: box-shadow 0.18s, border-color 0.18s;
   z-index: 50;
+}
+
+.site-header.is-scrolled {
+  border-bottom-color: transparent;
+  box-shadow: 0 10px 30px rgba(74, 58, 38, 0.08);
+}
+
+:root[data-theme="dark"] .site-header.is-scrolled {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .site-header.is-scrolled {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+  }
+}
+
+.reading-progress {
+  background: linear-gradient(90deg, var(--leaf), var(--amber));
+  height: 3px;
+  left: 0;
+  position: fixed;
+  top: 0;
+  transform: scaleX(var(--reading-progress, 0));
+  transform-origin: left center;
+  width: 100%;
+  z-index: 90;
 }
 
 .site-header .container {
