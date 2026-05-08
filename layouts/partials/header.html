@@ -3,24 +3,24 @@
     <a class="brand" href="{{ site.Home.RelPermalink }}">{{ site.Title }}</a>
     <div class="header-right">
       <nav aria-label="主导航">
-        <a class="nav-link{{ if .IsHome }} is-active{{ end }}" href="{{ site.Home.RelPermalink }}">首页</a>
+        <a class="nav-link{{ if .IsHome }} is-active{{ end }}" href="{{ site.Home.RelPermalink }}"{{ if .IsHome }} aria-current="page"{{ end }}>首页</a>
         {{ with site.GetPage "moments" }}
-          <a class="nav-link{{ if or (eq $.RelPermalink .RelPermalink) (eq $.Section "moments") }} is-active{{ end }}" href="{{ .RelPermalink }}">说说</a>
+          <a class="nav-link{{ if or (eq $.RelPermalink .RelPermalink) (eq $.Section "moments") }} is-active{{ end }}" href="{{ .RelPermalink }}"{{ if or (eq $.RelPermalink .RelPermalink) (eq $.Section "moments") }} aria-current="page"{{ end }}>说说</a>
         {{ end }}
         {{ with site.GetPage "albums" }}
-          <a class="nav-link{{ if or (eq $.RelPermalink .RelPermalink) (eq $.Section "albums") }} is-active{{ end }}" href="{{ .RelPermalink }}">相册</a>
+          <a class="nav-link{{ if or (eq $.RelPermalink .RelPermalink) (eq $.Section "albums") }} is-active{{ end }}" href="{{ .RelPermalink }}"{{ if or (eq $.RelPermalink .RelPermalink) (eq $.Section "albums") }} aria-current="page"{{ end }}>相册</a>
         {{ end }}
         {{ with site.GetPage "links" }}
-          <a class="nav-link{{ if eq $.RelPermalink .RelPermalink }} is-active{{ end }}" href="{{ .RelPermalink }}">友链</a>
+          <a class="nav-link{{ if eq $.RelPermalink .RelPermalink }} is-active{{ end }}" href="{{ .RelPermalink }}"{{ if eq $.RelPermalink .RelPermalink }} aria-current="page"{{ end }}>友链</a>
         {{ end }}
         {{ with site.Params.projectsURL }}
           <a class="nav-link" href="{{ . | relURL }}">项目</a>
         {{ end }}
         {{ with site.GetPage "tags" }}
-          <a class="nav-link{{ if eq $.RelPermalink .RelPermalink }} is-active{{ end }}" href="{{ .RelPermalink }}">标签</a>
+          <a class="nav-link{{ if eq $.RelPermalink .RelPermalink }} is-active{{ end }}" href="{{ .RelPermalink }}"{{ if eq $.RelPermalink .RelPermalink }} aria-current="page"{{ end }}>标签</a>
         {{ end }}
         {{ with site.GetPage "about" }}
-          <a class="nav-link{{ if eq $.RelPermalink .RelPermalink }} is-active{{ end }}" href="{{ .RelPermalink }}">关于</a>
+          <a class="nav-link{{ if eq $.RelPermalink .RelPermalink }} is-active{{ end }}" href="{{ .RelPermalink }}"{{ if eq $.RelPermalink .RelPermalink }} aria-current="page"{{ end }}>关于</a>
         {{ end }}
       </nav>
       {{ with site.GetPage "search" }}

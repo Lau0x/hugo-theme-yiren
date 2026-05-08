@@ -1,0 +1,124 @@
+{{ define "main" }}
+  {{ $sections := site.Params.mainSections | default (slice "posts") }}
+  {{ $posts := where site.RegularPages "Section" "in" $sections }}
+  {{ $latestPosts := first 3 $posts }}
+  {{ $latestPost := false }}
+  {{ if gt (len $latestPosts) 0 }}{{ $latestPost = index $latestPosts 0 }}{{ end }}
+  {{ $moments := first 1 (where site.RegularPages "Section" "moments") }}
+  {{ $moment := false }}
+  {{ if gt (len $moments) 0 }}{{ $moment = index $moments 0 }}{{ end }}
+  {{ $albums := first 1 (where (where site.RegularPages "Section" "albums") "Params.private" "!=" true) }}
+  {{ $album := false }}
+  {{ if gt (len $albums) 0 }}{{ $album = index $albums 0 }}{{ end }}
+  {{ $albumImages := slice }}
+  {{ with $album }}
+    {{ range .Resources.ByType "image" }}
+      {{ $albumImages = $albumImages | append .RelPermalink }}
+    {{ end }}
+  {{ end }}
+  {{ $featurePost := false }}
+  {{ $featureCover := "" }}
+  {{ range $posts }}
+    {{ if not $featureCover }}
+      {{ $candidateCover := "" }}
+      {{ with .Params.cover }}{{ $candidateCover = . }}{{ end }}
+      {{ with .Params.image }}{{ $candidateCover = . }}{{ end }}
+      {{ with .Params.images }}{{ with index . 0 }}{{ $candidateCover = . }}{{ end }}{{ end }}
+      {{ if not $candidateCover }}
+        {{ with findRESubmatch `!\[[^\]]*\]\(([^)]+)\)` .RawContent 1 }}
+          {{ with index . 0 }}{{ $candidateCover = index . 1 }}{{ end }}
+        {{ end }}
+      {{ end }}
+      {{ if $candidateCover }}
+        {{ $featurePost = . }}
+        {{ $featureCover = $candidateCover }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+  {{ if and (not $featurePost) $latestPost }}{{ $featurePost = $latestPost }}{{ end }}
+
+  <section class="home-hero" aria-labelledby="home-title">
+    <aside class="home-brand-panel" aria-label="站点简介">
+      <div class="home-brand-mark">{{ site.Params.homebrand | default site.Title }}</div>
+      <p class="home-tagline">{{ site.Params.hometagline | default "A quiet Hugo theme for personal journals" }}</p>
+      <nav class="home-quick-list" aria-label="内容捷径">
+        {{ with site.GetPage "posts" }}<a href="{{ .RelPermalink }}"><span aria-hidden="true">文</span><span>文章</span></a>{{ else }}<a href="{{ "posts/" | relURL }}"><span aria-hidden="true">文</span><span>文章</span></a>{{ end }}
+        {{ with site.GetPage "albums" }}<a href="{{ .RelPermalink }}"><span aria-hidden="true">照</span><span>照片</span></a>{{ end }}
+        {{ with site.GetPage "moments" }}<a href="{{ .RelPermalink }}"><span aria-hidden="true">记</span><span>日常</span></a>{{ end }}
+        {{ with site.GetPage "about" }}<a href="{{ .RelPermalink }}"><span aria-hidden="true">人</span><span>关于</span></a>{{ end }}
+      </nav>
+      <p class="home-side-note">{{ site.Params.homenote | default "把今天写下来，留给明天慢慢看。" }}</p>
+    </aside>
+
+    <div class="home-stage">
+      <div class="home-intro">
+        <p class="home-kicker">{{ site.Params.homekicker | default "Welcome to Yu" }}</p>
+        <h1 id="home-title">{{ site.Params.hometitle | default "日子很长，慢慢记。" }}</h1>
+        <p>{{ site.Params.homedescription | default site.Params.description | default "这里适合记录生活、想法、照片和那些值得慢慢保存的瞬间。" }}</p>
+        <div class="home-actions">
+          <a class="home-primary" href="{{ "posts/" | relURL }}">开始阅读</a>
+          {{ with site.GetPage "albums" }}<a class="home-secondary" href="{{ .RelPermalink }}">看看相册</a>{{ end }}
+        </div>
+      </div>
+
+      <div class="home-collage" aria-label="精选内容">
+        {{ if $featureCover }}
+          {{ with $featurePost }}
+            <a class="home-photo home-photo-large" href="{{ .RelPermalink }}" style="background-image: url('{{ $featureCover | relURL }}')">
+              <span>{{ .Title }}</span>
+            </a>
+          {{ end }}
+        {{ else }}
+          <div class="home-photo home-photo-large home-photo-empty">
+            <span>最新文章</span>
+          </div>
+        {{ end }}
+
+        {{ if ge (len $albumImages) 1 }}
+          {{ with $album }}<a class="home-photo" href="{{ .RelPermalink }}" style="background-image: url('{{ index $albumImages 0 }}')"><span>{{ .Title }}</span></a>{{ end }}
+        {{ else }}
+          {{ with site.GetPage "albums" }}<a class="home-note-card" href="{{ .RelPermalink }}">{{ else }}<div class="home-note-card">{{ end }}
+            <span>照片</span>
+            <strong>{{ site.Params.homephotonote | default "照片会慢慢长成时间的索引。" }}</strong>
+          {{ with site.GetPage "albums" }}</a>{{ else }}</div>{{ end }}
+        {{ end }}
+
+        {{ if ge (len $albumImages) 2 }}
+          {{ with $album }}<a class="home-photo home-photo-wide" href="{{ .RelPermalink }}" style="background-image: url('{{ index $albumImages 1 }}')"><span>{{ .Title }}</span></a>{{ end }}
+        {{ else }}
+          {{ with $moment }}
+            <a class="home-note-card home-note-card-soft" href="{{ .RelPermalink }}"><span>{{ .Params.mood | default "说说" }}</span><strong>{{ .Summary | plainify | truncate 72 }}</strong></a>
+          {{ else }}
+            <div class="home-note-card home-note-card-soft">
+              <span>日常</span>
+              <strong>{{ site.Params.homedailynote | default "一些不必写成长文的片刻，也值得被保存。" }}</strong>
+            </div>
+          {{ end }}
+        {{ end }}
+
+        {{ with site.GetPage "moments" }}<a class="home-quote-card" href="{{ .RelPermalink }}">{{ else }}<div class="home-quote-card">{{ end }}
+          <span>{{ site.Params.homequotelabel | default "片刻" }}</span>
+          <strong>{{ site.Params.homequote | default site.Params.homenote | default "光落在窗上，日子慢慢发亮。" }}</strong>
+        {{ with site.GetPage "moments" }}</a>{{ else }}</div>{{ end }}
+      </div>
+    </div>
+  </section>
+
+  {{ if $latestPosts }}
+    <section class="home-latest" aria-labelledby="latest-title">
+      <div class="home-section-head">
+        <h2 id="latest-title">最新文章</h2>
+        {{ with site.GetPage "posts" }}<a href="{{ .RelPermalink }}">查看全部</a>{{ else }}<a href="{{ "posts/" | relURL }}">查看全部</a>{{ end }}
+      </div>
+      <ul class="home-post-grid">
+        {{ range $latestPosts }}
+          {{ partial "post-card.html" . }}
+        {{ end }}
+      </ul>
+    </section>
+  {{ else }}
+    <div class="empty">
+      <p>还没有文章。</p>
+    </div>
+  {{ end }}
+{{ end }}

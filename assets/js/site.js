@@ -34,6 +34,7 @@
   });
 
   const backToTop = document.querySelector(".back-to-top");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   if (backToTop) {
     const toggleBackToTop = () => {
@@ -42,7 +43,7 @@
 
     toggleBackToTop();
     window.addEventListener("scroll", toggleBackToTop, { passive: true });
-    backToTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+    backToTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" }));
   }
 
   document.querySelectorAll(".code-copy").forEach((button) => {
