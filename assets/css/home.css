@@ -372,6 +372,10 @@
   color: #fff;
 }
 
+.home-photo-empty:hover {
+  color: var(--leaf);
+}
+
 .home-latest {
   margin-top: 2rem;
 }
@@ -477,4 +481,3 @@
 .home-post-grid .post-title {
   font-size: 1.15rem;
 }
-

@@ -64,6 +64,12 @@
               <span>{{ .Title }}</span>
             </a>
           {{ end }}
+        {{ else if $latestPost }}
+          {{ with $latestPost }}
+            <a class="home-photo home-photo-large home-photo-empty" href="{{ .RelPermalink }}">
+              <span>最新文章</span>
+            </a>
+          {{ end }}
         {{ else }}
           <div class="home-photo home-photo-large home-photo-empty">
             <span>最新文章</span>
